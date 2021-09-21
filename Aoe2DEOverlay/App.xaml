@@ -1,7 +1,7 @@
-﻿<Application x:Class="Aoe2DEOverlayAssistant.App"
+﻿<Application x:Class="Aoe2DEOverlay.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:Aoe2DEOverlayAssistant"
+             xmlns:local="clr-namespace:Aoe2DEOverlay"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
          

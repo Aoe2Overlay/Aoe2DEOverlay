@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Aoe2DEOverlayAssistant
+namespace Aoe2DEOverlay
 {
     public class Data
     {

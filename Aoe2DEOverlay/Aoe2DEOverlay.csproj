@@ -4,10 +4,9 @@
         <OutputType>WinExe</OutputType>
         <TargetFramework>net5.0-windows</TargetFramework>
         <UseWPF>true</UseWPF>
-        <AssemblyName>Aoe2DEOverlayAssistant</AssemblyName>
-        <RootNamespace>Aoe2DEOverlayAssistant</RootNamespace>
-        <StartupObject>Aoe2DEOverlayAssistant.App</StartupObject>
+        <StartupObject>Aoe2DEOverlay.App</StartupObject>
         <ApplicationIcon>icon.ico</ApplicationIcon>
+        <PackageId>Aoe2DEOverlay</PackageId>
     </PropertyGroup>
 
     <ItemGroup>

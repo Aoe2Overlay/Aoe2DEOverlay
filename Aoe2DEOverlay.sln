@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aoe2DEOverlayAssistant", "Aoe2DEOverlayAssistant\Aoe2DEOverlayAssistant.csproj", "{B710E1C3-3502-40EC-AAC5-3601F3D7A837}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aoe2DEOverlay", "Aoe2DEOverlay\Aoe2DEOverlay.csproj", "{B710E1C3-3502-40EC-AAC5-3601F3D7A837}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using Newtonsoft.Json.Linq;
 
-namespace Aoe2DEOverlayAssistant
+namespace Aoe2DEOverlay
 {
     public class Service
     {
@@ -182,17 +182,25 @@ namespace Aoe2DEOverlayAssistant
 
         private async Task<JToken> Fetch(string url)
         {
-            var response = await http.GetAsync(url);
-            if (response.StatusCode != HttpStatusCode.OK) return null;
-            var content = await response.Content.ReadAsStringAsync();
-            content = content.Trim();
-            if (content.StartsWith("{") && content.EndsWith("}"))
+            try
             {
-                return JObject.Parse(content);
+                var response = await http.GetAsync(url);
+                if (response.StatusCode != HttpStatusCode.OK) return null;
+                var content = await response.Content.ReadAsStringAsync();
+                content = content.Trim();
+                if (content.StartsWith("{") && content.EndsWith("}"))
+                {
+                    return JObject.Parse(content);
+                }
+
+                if (content.StartsWith("[") && content.EndsWith("]"))
+                {
+                    return JArray.Parse(content);
+                }
             }
-            if (content.StartsWith("[") && content.EndsWith("]"))
+            catch
             {
-                return JArray.Parse(content);
+                // ignored
             }
             return null;
         }

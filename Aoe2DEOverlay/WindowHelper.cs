@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Aoe2DEOverlayAssistant
+namespace Aoe2DEOverlay
 {
     
     // https://stackoverflow.com/questions/58824122/how-can-i-make-an-overlay-window-that-allows-mouse-clicks-to-pass-through-to-w

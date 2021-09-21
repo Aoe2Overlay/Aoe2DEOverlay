@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Aoe2DEOverlayAssistant
+namespace Aoe2DEOverlay
 {
     /// <summary>
     /// Interaction logic for App.xaml

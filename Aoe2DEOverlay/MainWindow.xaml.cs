@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 
-namespace Aoe2DEOverlayAssistant
+namespace Aoe2DEOverlay
 {
     public partial class MainWindow : Window, IServiceObserver, ISettingObserver
     {

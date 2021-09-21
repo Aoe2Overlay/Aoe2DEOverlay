@@ -1,11 +1,10 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Aoe2DEOverlayAssistant
+namespace Aoe2DEOverlay
 {
     class Setting
     {
@@ -132,7 +131,6 @@ namespace Aoe2DEOverlayAssistant
                                    NotifyFilters.Security |  
                                    NotifyFilters.Size;
             watcher.Changed += new FileSystemEventHandler(OnChanged);  
-            watcher.Created += new FileSystemEventHandler(OnChanged);
             watcher.Filter = FileName;  
             watcher.EnableRaisingEvents = true; 
         }
@@ -144,8 +142,15 @@ namespace Aoe2DEOverlayAssistant
         
         public void Load()
         {
-            var text =System.IO.File.ReadAllText(FilePath);
-            Json = JObject.Parse(text);
+            try
+            {
+                var text =System.IO.File.ReadAllText(FilePath);
+                Json = JObject.Parse(text);
+            }
+            catch
+            {
+                // ignored
+            }
         }
         
         public void OnChanged(object source, FileSystemEventArgs e)  

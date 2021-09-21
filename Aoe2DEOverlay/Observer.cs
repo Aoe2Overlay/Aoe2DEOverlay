@@ -1,4 +1,4 @@
-﻿namespace Aoe2DEOverlayAssistant
+﻿namespace Aoe2DEOverlay
 {
     public interface IServiceObserver
     {
