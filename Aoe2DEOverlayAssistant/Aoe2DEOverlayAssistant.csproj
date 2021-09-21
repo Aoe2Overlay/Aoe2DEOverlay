@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net5.0-windows</TargetFramework>
+        <UseWPF>true</UseWPF>
+        <AssemblyName>Aoe2DEOverlayAssistant</AssemblyName>
+        <RootNamespace>Aoe2DEOverlayAssistant</RootNamespace>
+        <StartupObject>Aoe2DEOverlayAssistant.App</StartupObject>
+        <ApplicationIcon>icon.ico</ApplicationIcon>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="icon.ico">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+    </ItemGroup>
+
+</Project>
