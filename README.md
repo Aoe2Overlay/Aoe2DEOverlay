@@ -34,22 +34,31 @@ Example:
 
 ## Formatting
 
-It automated dedect if you play RM or EW so you can just use `1v1` or `team` to display the correct data.
+It automatically detects if the match is RM or EW and loads the correct data for `1v1` and `team` accordingly.
 
-`{slot}`   
-`{name}` Name of the Player  
-`{country}` Country of the Player  
-`{1v1.rank}` The leaderboard rank position of the Player  
-`{1v1.elo}`  The elo points of the Player
-`{1v1.rate}`  
-`{1v1.streak}`  
-`{1v1.games}`  
-`{1v1.wins}`  
-`{1v1.losses}`  
-`{team.rank}`  
-`{team.elo}`  
-`{team.rate}`  
-`{team.streak}`  
-`{team.games}`  
-`{mTeam.wins}`  
-`{mTeam.losses}`  
+It is possible to display differently format for 1v1 (`format1v1`) or team (`formatTeam`) matches.
+
+Example:
+
+    "format1v1": "<{country}> [E:{1v1.elo} W:{1v1.rate} S:{1v1.streak} G:{1v1.games}]",
+    "formatTeam": "{name} <{country}> [E:{1v1.elo} T:{team.elo}])",
+
+| Placeholder     | Description                                                     |
+| :-------------- | :-------------------------------------------------------------- |
+| `{slot}`        | The match slot of the player                                    |
+| `{name}`        | Name of the player                                              |
+| `{country}`     | Country of the player                                           |
+| `{1v1.rank}`    | The leaderboard 1v1 rank position of the player                 |
+| `{1v1.elo}`     | The 1v1 elo points of the player                                |
+| `{1v1.rate}`    | The 1v1 win rate of the player                                  |
+| `{1v1.streak}`  | The 1v1 streak of wining or loosing matches of the player       |
+| `{1v1.games}`   | The number of 1v1 matches the player has played                 |
+| `{1v1.wins}`    | The number of 1v1 matches the player has won                    |
+| `{1v1.losses}`  | The number of 1v1 matches the player has lost                   |
+| `{team.rank}`   | The leaderboard team game rank position of the player           |
+| `{team.elo}`    | The team game elo points of the player                          |
+| `{team.rate}`   | The team game win rate of the player                            |
+| `{team.streak}` | The team game streak of wining or loosing matches of the player |
+| `{team.games}`  | The number of team matches the player has played                |
+| `{team.wins}`   | The number of team matches the player has won                   |
+| `{team.losses}` | The number of team matches the player has lost                  |
