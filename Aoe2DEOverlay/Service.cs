@@ -27,8 +27,8 @@ namespace Aoe2DEOverlay
         private HttpClient http = new();
         private Timer timer = new(5000);
         private string baseUrl = "https://aoe2.net/api/";
-        public int ProfileId = -1;
         
+        public int ProfileId = -1;
         public Data Data { get; private set; } = null;
 
         private class ServiceState

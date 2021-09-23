@@ -14,7 +14,7 @@ namespace Aoe2DEOverlay
             Service.Instance.ProfileId = Setting.Instance.ProfileId;
             Service.Instance.observer = this;
             Service.Instance.Start();
-            Setting.Instance.observer = this;
+            Setting.Instance.Observer = this;
             LoadingState();
             Changed();
         }
