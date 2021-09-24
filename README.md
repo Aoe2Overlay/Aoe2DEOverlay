@@ -17,7 +17,7 @@ Example:
 
 ## Start
 
-Run the `Aoe2DEOverlay.exe` to start the overlay. Know the last or currently playing match is automatically displayed. The update can sometimes take a few seconds after the match start. 
+Run the `Aoe2DEOverlay.exe` to start the overlay. Now the last or currently playing match is automatically displayed. The update can sometimes take a few seconds after the match start. 
 
 ## Layouting
 
