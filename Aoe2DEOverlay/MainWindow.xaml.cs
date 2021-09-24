@@ -122,14 +122,14 @@ namespace Aoe2DEOverlay
         {
             if (data.players.Count < slot)  return new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
             var p = data.players[slot  - 1];
-            if (p.Color == 1) return new SolidColorBrush(Color.FromArgb(255, 60, 120, 255));
-            if (p.Color == 2) return new SolidColorBrush(Color.FromArgb(255, 255, 20, 20));
-            if (p.Color == 3) return new SolidColorBrush(Color.FromArgb(255, 20, 255, 20));
-            if (p.Color == 4) return new SolidColorBrush(Color.FromArgb(255, 250, 250, 10));
-            if (p.Color == 5) return new SolidColorBrush(Color.FromArgb(255, 40, 220, 195));
-            if (p.Color == 6) return new SolidColorBrush(Color.FromArgb(255, 230, 110, 230));
-            if (p.Color == 7) return new SolidColorBrush(Color.FromArgb(255, 210, 210, 210));
-            if (p.Color == 8) return new SolidColorBrush(Color.FromArgb(255, 240, 170, 50));
+            if (p.Color == 1) return new SolidColorBrush(Setting.Instance.Player1Color);
+            if (p.Color == 2) return new SolidColorBrush(Setting.Instance.Player2Color);
+            if (p.Color == 3) return new SolidColorBrush(Setting.Instance.Player3Color);
+            if (p.Color == 4) return new SolidColorBrush(Setting.Instance.Player4Color);
+            if (p.Color == 5) return new SolidColorBrush(Setting.Instance.Player5Color);
+            if (p.Color == 6) return new SolidColorBrush(Setting.Instance.Player6Color);
+            if (p.Color == 7) return new SolidColorBrush(Setting.Instance.Player7Color);
+            if (p.Color == 8) return new SolidColorBrush(Setting.Instance.Player8Color);
             return new SolidColorBrush(Color.FromArgb(255, 255, 255, 255)); 
         }
 
@@ -173,7 +173,8 @@ namespace Aoe2DEOverlay
             RaitingPanel.Margin = new Thickness(Setting.Instance.MarginLeft, Setting.Instance.MarginTop, Setting.Instance.MarginRight, Setting.Instance.MarginBottom);
             RaitingPanel.HorizontalAlignment = Setting.Instance.Horizontal;
             RaitingPanel.VerticalAlignment = Setting.Instance.Vertical;
-            LabelFontSize(Setting.Instance.FontSize);
+            Border.Background = new SolidColorBrush(Setting.Instance.BackgroundColor);
+            Border.BorderBrush = new SolidColorBrush(Setting.Instance.BorderColor);
         }
     }
 }
