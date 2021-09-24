@@ -25,8 +25,8 @@ By default it is displayed in the top center. You can adjust the `horizontal` al
 
 Example:
 
-    "vertical": 'top',
-    "horizontal": 'center',
+    "vertical": "top",
+    "horizontal": "center",
 
 Example:
 
