@@ -6,6 +6,7 @@ namespace Aoe2DEOverlay
     public class Data
     {
         public int LeaderboardId;
+        public string Server;
         public List<Player> players = new (8);
     }
     public class Player

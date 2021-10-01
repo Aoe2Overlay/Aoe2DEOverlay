@@ -13,23 +13,32 @@
         ResizeMode="NoResize"
         Topmost="True"
         >
-    <StackPanel Name="RaitingPanel">
-        <Border Name="Border" BorderBrush="#80FFFFFF" BorderThickness="1" CornerRadius="4"  Background="#BB000000" Padding="2, 2, 2, 4">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Label Name="LoadingLabel" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="5, 0, 5, 0" Padding="0" />
-                <StackPanel HorizontalAlignment="Center" >
-                    <Label Name="P1Label" Foreground="White" HorizontalContentAlignment="Right" VerticalAlignment="Top" Margin="5, 0, 5, 0" Padding="0" />
-                    <Label Name="P3Label" Foreground="White" HorizontalContentAlignment="Right" VerticalAlignment="Top" Margin="5, 0, 5, 0" Padding="0" />
-                    <Label Name="P5Label" Foreground="White" HorizontalContentAlignment="Right" VerticalAlignment="Top" Margin="5, 0, 5, 0" Padding="0" />
-                    <Label Name="P7Label" Foreground="White" HorizontalContentAlignment="Right" VerticalAlignment="Top" Margin="5, 0, 5, 0" Padding="0" />
+    <Grid>
+        <StackPanel Name="RaitingPanel" Margin="0">
+            <Border Name="RaitingBorder" BorderBrush="#80FFFFFF" BorderThickness="1" CornerRadius="4"  Background="#BB000000" Padding="2, 2, 2, 4">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Label Name="LoadingLabel" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="5, 0, 5, 0" Padding="0" />
+                    <StackPanel HorizontalAlignment="Center" >
+                        <Label Name="P1Label" Foreground="White" HorizontalContentAlignment="Right" VerticalAlignment="Top" Margin="5, 0, 5, 0" Padding="0" />
+                        <Label Name="P3Label" Foreground="White" HorizontalContentAlignment="Right" VerticalAlignment="Top" Margin="5, 0, 5, 0" Padding="0" />
+                        <Label Name="P5Label" Foreground="White" HorizontalContentAlignment="Right" VerticalAlignment="Top" Margin="5, 0, 5, 0" Padding="0" />
+                        <Label Name="P7Label" Foreground="White" HorizontalContentAlignment="Right" VerticalAlignment="Top" Margin="5, 0, 5, 0" Padding="0" />
+                    </StackPanel>
+                    <StackPanel HorizontalAlignment="Center" >
+                        <Label Name="P2Label" Foreground="White" HorizontalContentAlignment="Left" VerticalAlignment="Top" Margin="5, 0, 5, 0" Padding="0" />
+                        <Label Name="P4Label" Foreground="White" HorizontalContentAlignment="Left" VerticalAlignment="Top" Margin="5, 0, 5, 0" Padding="0" />
+                        <Label Name="P6Label" Foreground="White" HorizontalContentAlignment="Left" VerticalAlignment="Top" Margin="5, 0, 5, 0" Padding="0" />
+                        <Label Name="P8Label" Foreground="White" HorizontalContentAlignment="Left" VerticalAlignment="Top" Margin="5, 0, 5, 0" Padding="0" />
+                    </StackPanel>
                 </StackPanel>
-                <StackPanel HorizontalAlignment="Center" >
-                    <Label Name="P2Label" Foreground="White" HorizontalContentAlignment="Left" VerticalAlignment="Top" Margin="5, 0, 5, 0" Padding="0" />
-                    <Label Name="P4Label" Foreground="White" HorizontalContentAlignment="Left" VerticalAlignment="Top" Margin="5, 0, 5, 0" Padding="0" />
-                    <Label Name="P6Label" Foreground="White" HorizontalContentAlignment="Left" VerticalAlignment="Top" Margin="5, 0, 5, 0" Padding="0" />
-                    <Label Name="P8Label" Foreground="White" HorizontalContentAlignment="Left" VerticalAlignment="Top" Margin="5, 0, 5, 0" Padding="0" />
+            </Border>
+        </StackPanel>
+        <StackPanel Name="ServerPanel" Margin="0">
+            <Border Name="ServerBorder" BorderBrush="#80FFFFFF" BorderThickness="1" CornerRadius="4"  Background="#BB000000" Padding="2, 2, 2, 4">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Label Name="ServerLabel" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="5, 0, 5, 0" Padding="0" />
                 </StackPanel>
-            </StackPanel>
-        </Border>
-    </StackPanel>
+            </Border>
+        </StackPanel>
+    </Grid>
 </Window>

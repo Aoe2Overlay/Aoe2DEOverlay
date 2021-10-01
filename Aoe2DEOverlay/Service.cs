@@ -68,6 +68,7 @@ namespace Aoe2DEOverlay
                 State.IsLoaded = false;
                 var leaderboardId = lastMatchJson["last_match"]["leaderboard_id"].Value<int>();
                 data.LeaderboardId = leaderboardId;
+                data.Server = lastMatchJson["last_match"]["server"].Value<string>();
                 var playersJson = lastMatchJson["last_match"]["players"].Values<JObject>();
                 foreach (var playerJson in playersJson)
                 {
@@ -90,7 +91,7 @@ namespace Aoe2DEOverlay
                     player.Color = playerJson["color"].Value<int>();
                     player.Name = playerJson["name"].Value<string>();
                     player.Civ = ((Civ) playerJson["civ"].Value<int>()).ToString();
-                    
+
                     var rm1v1Array = lbRM1v1Json["leaderboard"].Values<JObject>().ToArray();
                     var rmTeamArray = lbRMTeamJson["leaderboard"].Values<JObject>().ToArray();
                     var ew1v1Array = lbEW1v1Json["leaderboard"].Values<JObject>().ToArray();

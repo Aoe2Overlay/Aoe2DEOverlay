@@ -38,6 +38,8 @@ namespace Aoe2DEOverlay
             P6Label.Visibility = Visibility.Collapsed; 
             P7Label.Visibility = Visibility.Collapsed; 
             P8Label.Visibility = Visibility.Collapsed; 
+            
+            ServerPanel.Visibility = Visibility.Collapsed; 
         }
 
         public void Update(Data data)
@@ -49,6 +51,9 @@ namespace Aoe2DEOverlay
             }
             
             LoadingLabel.Visibility = Visibility.Collapsed;
+            ServerPanel.Visibility = Visibility.Visible;
+            
+            ServerLabel.Content = ServerLabelText(Service.Instance.Data);
             
             UpdateLabels(data);
         }
@@ -83,6 +88,13 @@ namespace Aoe2DEOverlay
             P8Label.Visibility = PlayerLabelVisible(data, 8);
         }
 
+        private string ServerLabelText(Data data)
+        {
+            var text =  Setting.Instance.Server.Format;
+            text = text.Replace("{server}", $"{data.Server}");
+            return text;
+        }
+
         private string PlayerLabelText(Data data, int slot)
         {
             if (data.players.Count < slot) return "";
@@ -93,7 +105,7 @@ namespace Aoe2DEOverlay
             var text =  data.players.Count <= 2 ? Setting.Instance.Format1v1 : Setting.Instance.FormatTeam;
 
             var streak1v1Prefix = m1v1.Streak > 0 ? "+" : mTeam.Streak == 0 ? " " : "";
-            var streakteamPrefix = mTeam.Streak > 0 ? "+" : mTeam.Streak == 0 ? " " : "";
+            var streakTeamPrefix = mTeam.Streak > 0 ? "+" : mTeam.Streak == 0 ? " " : "";
 
             text = text.Replace("{slot}", $"{player.Slot}");
             text = text.Replace("{name}", $"{player.Name}");
@@ -112,7 +124,7 @@ namespace Aoe2DEOverlay
             text = text.Replace("{team.rank}", $"{mTeam.Rank}");
             text = text.Replace("{team.elo}", $"{mTeam.Elo}");
             text = text.Replace("{team.rate}", $"{mTeam.WinRate}%");
-            text = text.Replace("{team.streak}", $"{streakteamPrefix}{mTeam.Streak.ToString()}");
+            text = text.Replace("{team.streak}", $"{streakTeamPrefix}{mTeam.Streak.ToString()}");
             text = text.Replace("{team.games}", $"{mTeam.Games}");
             text = text.Replace("{mTeam.wins}", $"{mTeam.Wins}");
             text = text.Replace("{mTeam.losses}", $"{mTeam.Losses}");
@@ -137,6 +149,7 @@ namespace Aoe2DEOverlay
 
         private void LabelFontSize(double size)
         {
+            ServerLabel.FontSize = size;
             LoadingLabel.FontSize = size;
             P1Label.FontSize = size;
             P2Label.FontSize = size;
@@ -169,15 +182,20 @@ namespace Aoe2DEOverlay
             }
             else if(Service.Instance.Data != null)
             {
-                 UpdateLabels(Service.Instance.Data);
+                Update(Service.Instance.Data);
             }
 
             RaitingPanel.Margin = new Thickness(Setting.Instance.MarginLeft, Setting.Instance.MarginTop, Setting.Instance.MarginRight, Setting.Instance.MarginBottom);
             RaitingPanel.HorizontalAlignment = Setting.Instance.Horizontal;
             RaitingPanel.VerticalAlignment = Setting.Instance.Vertical;
+            RaitingBorder.Background = new SolidColorBrush(Setting.Instance.BackgroundColor);
+            RaitingBorder.BorderBrush = new SolidColorBrush(Setting.Instance.BorderColor);
             LabelFontSize(Setting.Instance.FontSize);
-            Border.Background = new SolidColorBrush(Setting.Instance.BackgroundColor);
-            Border.BorderBrush = new SolidColorBrush(Setting.Instance.BorderColor);
+
+            
+            ServerPanel.Margin = new Thickness(Setting.Instance.Server.MarginLeft, Setting.Instance.Server.MarginTop, Setting.Instance.Server.MarginRight, Setting.Instance.Server.MarginBottom);
+            ServerPanel.HorizontalAlignment = Setting.Instance.Server.Horizontal;
+            ServerPanel.VerticalAlignment = Setting.Instance.Server.Vertical;
         }
     }
 }
