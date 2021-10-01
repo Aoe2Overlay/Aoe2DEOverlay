@@ -173,6 +173,7 @@ namespace Aoe2DEOverlay
             RaitingPanel.Margin = new Thickness(Setting.Instance.MarginLeft, Setting.Instance.MarginTop, Setting.Instance.MarginRight, Setting.Instance.MarginBottom);
             RaitingPanel.HorizontalAlignment = Setting.Instance.Horizontal;
             RaitingPanel.VerticalAlignment = Setting.Instance.Vertical;
+            LabelFontSize(Setting.Instance.FontSize);
             Border.Background = new SolidColorBrush(Setting.Instance.BackgroundColor);
             Border.BorderBrush = new SolidColorBrush(Setting.Instance.BorderColor);
         }
