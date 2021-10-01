@@ -14,10 +14,11 @@ namespace Aoe2DEOverlay
         private static string marginBottomKey = "top";
         private static string verticalKey = "vertical";
         private static string horizontalKey = "horizontal";
+        private static string fontSizeKey = "fontSize";
         
         private static string formatDefault = "server: {server}";
 
-        public ServerSetting()
+        public ServerSetting(JObject json)
         {
             json[marginTopKey] = 0;
             json[marginLeftKey] = 0;
@@ -26,6 +27,8 @@ namespace Aoe2DEOverlay
             json[formatKey] = formatDefault;
             json[horizontalKey] = "right";
             json[verticalKey] = "top";
+            
+            this.json = json;
         }
 
         public void Load(JObject json)
@@ -54,6 +57,12 @@ namespace Aoe2DEOverlay
         
         public double MarginBottom { get {
             var token = json[marginBottomKey];
+            if (token == null || token.Value<string>() == null) return 0;
+            return token.Value<double>();
+        } }
+        
+        public double FontSize { get {
+            var token = json[fontSizeKey];
             if (token == null || token.Value<string>() == null) return 0;
             return token.Value<double>();
         } }

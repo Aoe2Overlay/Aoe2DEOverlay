@@ -36,6 +36,8 @@ Example:
 
 ## Formatting
 
+### Player Raiting
+
 It automatically detects if the match is RM or EW and loads the correct data for `1v1` and `team` accordingly.
 
 It is possible to display differently format for 1v1 (`format1v1`) or team (`formatTeam`) matches.
@@ -65,6 +67,21 @@ Example:
 | `{team.games}`  | The number of team matches the player has played                |
 | `{team.wins}`   | The number of team matches the player has won                   |
 | `{team.losses}` | The number of team matches the player has lost                  |
+
+
+### Match Info
+
+Example:
+
+    server: {
+        "format": "s: {server} m: {mode.name}",
+    }
+
+| Placeholder    | Description                                                                                        |
+| :------------- | :------------------------------------------------------------------------------------------------- |
+| `{server}`     | The game server of the match                                                                       |
+| `{mode.name}`  | The mode name of the match Unranked, Deathmatch, Random Map, Empire Wars                           |
+| `{mode.short}` | The mode short name of the match UR (Unranked), DM (Deathmatch), RM (Random Map), EW (Empire Wars) |
 
 ## Theming
 

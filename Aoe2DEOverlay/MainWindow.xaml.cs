@@ -92,6 +92,8 @@ namespace Aoe2DEOverlay
         {
             var text =  Setting.Instance.Server.Format;
             text = text.Replace("{server}", $"{data.Server}");
+            text = text.Replace("{mode.name}", $"{data.MatchModeName}");
+            text = text.Replace("{mode.short}", $"{data.MatchModeShort}");
             return text;
         }
 
@@ -102,7 +104,7 @@ namespace Aoe2DEOverlay
             var player = data.players[slot  - 1];
             var m1v1 = data.LeaderboardId > 10 ? player.EW1v1 : player.RM1v1;
             var mTeam = data.LeaderboardId > 10 ? player.EWTeam : player.RMTeam;
-            var text =  data.players.Count <= 2 ? Setting.Instance.Format1v1 : Setting.Instance.FormatTeam;
+            var text =  data.players.Count <= 2 ? Setting.Instance.Raiting.Format1v1 : Setting.Instance.Raiting.FormatTeam;
 
             var streak1v1Prefix = m1v1.Streak > 0 ? "+" : mTeam.Streak == 0 ? " " : "";
             var streakTeamPrefix = mTeam.Streak > 0 ? "+" : mTeam.Streak == 0 ? " " : "";
@@ -136,20 +138,19 @@ namespace Aoe2DEOverlay
         {
             if (data.players.Count < slot)  return new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
             var p = data.players[slot  - 1];
-            if (p.Color == 1) return new SolidColorBrush(Setting.Instance.Player1Color);
-            if (p.Color == 2) return new SolidColorBrush(Setting.Instance.Player2Color);
-            if (p.Color == 3) return new SolidColorBrush(Setting.Instance.Player3Color);
-            if (p.Color == 4) return new SolidColorBrush(Setting.Instance.Player4Color);
-            if (p.Color == 5) return new SolidColorBrush(Setting.Instance.Player5Color);
-            if (p.Color == 6) return new SolidColorBrush(Setting.Instance.Player6Color);
-            if (p.Color == 7) return new SolidColorBrush(Setting.Instance.Player7Color);
-            if (p.Color == 8) return new SolidColorBrush(Setting.Instance.Player8Color);
+            if (p.Color == 1) return new SolidColorBrush(Setting.Instance.Raiting.Player1Color);
+            if (p.Color == 2) return new SolidColorBrush(Setting.Instance.Raiting.Player2Color);
+            if (p.Color == 3) return new SolidColorBrush(Setting.Instance.Raiting.Player3Color);
+            if (p.Color == 4) return new SolidColorBrush(Setting.Instance.Raiting.Player4Color);
+            if (p.Color == 5) return new SolidColorBrush(Setting.Instance.Raiting.Player5Color);
+            if (p.Color == 6) return new SolidColorBrush(Setting.Instance.Raiting.Player6Color);
+            if (p.Color == 7) return new SolidColorBrush(Setting.Instance.Raiting.Player7Color);
+            if (p.Color == 8) return new SolidColorBrush(Setting.Instance.Raiting.Player8Color);
             return new SolidColorBrush(Color.FromArgb(255, 255, 255, 255)); 
         }
 
-        private void LabelFontSize(double size)
+        private void RaitingLabelFontSize(double size)
         {
-            ServerLabel.FontSize = size;
             LoadingLabel.FontSize = size;
             P1Label.FontSize = size;
             P2Label.FontSize = size;
@@ -185,17 +186,18 @@ namespace Aoe2DEOverlay
                 Update(Service.Instance.Data);
             }
 
-            RaitingPanel.Margin = new Thickness(Setting.Instance.MarginLeft, Setting.Instance.MarginTop, Setting.Instance.MarginRight, Setting.Instance.MarginBottom);
-            RaitingPanel.HorizontalAlignment = Setting.Instance.Horizontal;
-            RaitingPanel.VerticalAlignment = Setting.Instance.Vertical;
-            RaitingBorder.Background = new SolidColorBrush(Setting.Instance.BackgroundColor);
-            RaitingBorder.BorderBrush = new SolidColorBrush(Setting.Instance.BorderColor);
-            LabelFontSize(Setting.Instance.FontSize);
+            RaitingPanel.Margin = new Thickness(Setting.Instance.Raiting.MarginLeft, Setting.Instance.Raiting.MarginTop, Setting.Instance.Raiting.MarginRight, Setting.Instance.Raiting.MarginBottom);
+            RaitingPanel.HorizontalAlignment = Setting.Instance.Raiting.Horizontal;
+            RaitingPanel.VerticalAlignment = Setting.Instance.Raiting.Vertical;
+            RaitingBorder.Background = new SolidColorBrush(Setting.Instance.Raiting.BackgroundColor);
+            RaitingBorder.BorderBrush = new SolidColorBrush(Setting.Instance.Raiting.BorderColor);
+            RaitingLabelFontSize(Setting.Instance.Raiting.FontSize);
 
             
             ServerPanel.Margin = new Thickness(Setting.Instance.Server.MarginLeft, Setting.Instance.Server.MarginTop, Setting.Instance.Server.MarginRight, Setting.Instance.Server.MarginBottom);
             ServerPanel.HorizontalAlignment = Setting.Instance.Server.Horizontal;
             ServerPanel.VerticalAlignment = Setting.Instance.Server.Vertical;
+            ServerLabel.FontSize = Setting.Instance.Server.FontSize;
         }
     }
 }

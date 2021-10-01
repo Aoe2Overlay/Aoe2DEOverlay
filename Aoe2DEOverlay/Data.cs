@@ -7,6 +7,8 @@ namespace Aoe2DEOverlay
     {
         public int LeaderboardId;
         public string Server;
+        public string MatchModeName; // Random Map, Empire Wars, Unranked
+        public string MatchModeShort; // RM, EW, UR
         public List<Player> players = new (8);
     }
     public class Player

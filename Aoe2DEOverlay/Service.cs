@@ -68,7 +68,10 @@ namespace Aoe2DEOverlay
                 State.IsLoaded = false;
                 var leaderboardId = lastMatchJson["last_match"]["leaderboard_id"].Value<int>();
                 data.LeaderboardId = leaderboardId;
+                data.MatchModeName = ((LeaderboardType) leaderboardId).ToModeName();
+                data.MatchModeShort = ((LeaderboardType) leaderboardId).ToModeShort();
                 data.Server = lastMatchJson["last_match"]["server"].Value<string>();
+                
                 var playersJson = lastMatchJson["last_match"]["players"].Values<JObject>();
                 foreach (var playerJson in playersJson)
                 {
