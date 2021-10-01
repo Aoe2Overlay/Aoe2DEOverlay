@@ -98,6 +98,8 @@ namespace Aoe2DEOverlay
             text = text.Replace("{slot}", $"{player.Slot}");
             text = text.Replace("{name}", $"{player.Name}");
             text = text.Replace("{country}", $"{player.Country}");
+            text = text.Replace("{civ}", $"{player.Civ}");
+            text = text.Replace("{id}", $"{player.Id}");
             
             text = text.Replace("{1v1.rank}", $"{m1v1.Rank}");
             text = text.Replace("{1v1.elo}", $"{m1v1.Elo}");

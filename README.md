@@ -50,6 +50,7 @@ Example:
 | `{slot}`        | The match slot of the player                                    |
 | `{name}`        | Name of the player                                              |
 | `{country}`     | Country of the player                                           |
+| `{civ}`         | Civilisation the player plays                                   |
 | `{1v1.rank}`    | The leaderboard 1v1 rank position of the player                 |
 | `{1v1.elo}`     | The 1v1 elo points of the player                                |
 | `{1v1.rate}`    | The 1v1 win rate of the player                                  |

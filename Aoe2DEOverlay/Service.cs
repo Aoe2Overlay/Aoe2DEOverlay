@@ -89,6 +89,7 @@ namespace Aoe2DEOverlay
                     player.Slot = playerJson["slot"].Value<int>();
                     player.Color = playerJson["color"].Value<int>();
                     player.Name = playerJson["name"].Value<string>();
+                    player.Civ = ((Civ) playerJson["civ"].Value<int>()).ToString();
                     
                     var rm1v1Array = lbRM1v1Json["leaderboard"].Values<JObject>().ToArray();
                     var rmTeamArray = lbRMTeamJson["leaderboard"].Values<JObject>().ToArray();
@@ -165,28 +166,32 @@ namespace Aoe2DEOverlay
         private async Task<JToken> FetchLastmatch(int profileId)
         {
             var url = $"{baseUrl}player/lastmatch?game=aoe2de&profile_id={profileId}";
-            return await Fetch(url);
+            return await FetchJSON(url);
         }
 
         private async Task<JToken> FetchLeaderboard(int profileId, int leaderboardId)
         {
             var url = $"{baseUrl}leaderboard?game=aoe2de&profile_id={profileId}&leaderboard_id={leaderboardId}";
-            return await Fetch(url);
+            return await FetchJSON(url);
         }
 
         private async Task<JToken> FetchRatinghistory(int profileId, int leaderboardId)
         {
             var url = $"{baseUrl}player/ratinghistory?game=aoe2de&profile_id={profileId}&leaderboard_id={leaderboardId}&count=1";
-            return await Fetch(url);
+            return await FetchJSON(url);
         }
 
-        private async Task<JToken> Fetch(string url)
+        private async Task<string> Fetch(string url)
+        {
+            var response = await http.GetAsync(url);
+            if (response.StatusCode != HttpStatusCode.OK) return null;
+            return await response.Content.ReadAsStringAsync();
+        }
+        private async Task<JToken> FetchJSON(string url)
         {
             try
             {
-                var response = await http.GetAsync(url);
-                if (response.StatusCode != HttpStatusCode.OK) return null;
-                var content = await response.Content.ReadAsStringAsync();
+                var content = await Fetch(url);
                 content = content.Trim();
                 if (content.StartsWith("{") && content.EndsWith("}"))
                 {
