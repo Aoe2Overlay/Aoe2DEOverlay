@@ -95,6 +95,7 @@ namespace Aoe2DEOverlay
             text = text.Replace("{server.name}", $"{data.ServerName}");
             text = text.Replace("{mode.name}", $"{data.MatchModeName}");
             text = text.Replace("{mode.short}", $"{data.MatchModeShort}");
+            text = text.Replace("{map.name}", $"{data.MapName}");
             return text;
         }
 
