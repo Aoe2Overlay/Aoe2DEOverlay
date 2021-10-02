@@ -5,7 +5,7 @@ namespace Aoe2DEOverlay
 {
     class ServerSetting
     {
-        private JObject json = new JObject();
+        private JObject json;
         
         private static string formatKey = "format";
         private static string marginTopKey = "bottom";
@@ -38,38 +38,38 @@ namespace Aoe2DEOverlay
         
         public double MarginTop { get {
             var token = json[marginTopKey];
-            if (token == null || token.Value<string>() == null) return 0;
+            if (token == null) return 0;
             var top = token.Value<double>();
             return top;
         } }
         
         public double MarginLeft { get {
             var token = json[marginLeftKey];
-            if (token == null || token.Value<string>() == null) return 0;
+            if (token == null) return 0;
             return token.Value<double>();
         } }
         
         public double MarginRight { get {
             var token = json[marginRightKey];
-            if (token == null || token.Value<string>() == null) return 0;
+            if (token == null) return 0;
             return token.Value<double>();
         } }
         
         public double MarginBottom { get {
             var token = json[marginBottomKey];
-            if (token == null || token.Value<string>() == null) return 0;
+            if (token == null) return 0;
             return token.Value<double>();
         } }
         
         public double FontSize { get {
             var token = json[fontSizeKey];
-            if (token == null || token.Value<string>() == null) return 0;
+            if (token == null) return 0;
             return token.Value<double>();
         } }
         
         public string Format { get {
             var token = json[formatKey];
-            if (token == null || token.Value<string>() == null) return "";
+            if (token == null) return "";
             return token.Value<string>();
         } }
 
@@ -77,17 +77,17 @@ namespace Aoe2DEOverlay
             var token = json[horizontalKey];
             if (token == null || token.Value<string>() == null) return HorizontalAlignment.Center;
             var horizontal = token.Value<string>();
-            if (horizontal.ToLower() == "left") return HorizontalAlignment.Left;
-            if (horizontal.ToLower() == "right") return HorizontalAlignment.Right;
+            if (horizontal?.ToLower() == "left") return HorizontalAlignment.Left;
+            if (horizontal?.ToLower() == "right") return HorizontalAlignment.Right;
             return HorizontalAlignment.Center;
         } }
         
         public VerticalAlignment Vertical { get {
             var token = json[verticalKey];
             if (token == null || token.Value<string>() == null) return VerticalAlignment.Center;
-            var horizontal = token.Value<string>();
-            if (horizontal.ToLower() == "top") return VerticalAlignment.Top;
-            if (horizontal.ToLower() == "bottom") return VerticalAlignment.Bottom;
+            var vertical = token.Value<string>();
+            if (vertical?.ToLower() == "top") return VerticalAlignment.Top;
+            if (vertical?.ToLower() == "bottom") return VerticalAlignment.Bottom;
             return VerticalAlignment.Center;
         } }
     }

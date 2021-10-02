@@ -6,7 +6,7 @@ namespace Aoe2DEOverlay
 {
     class RaitingSetting
     {
-        private JObject json = new JObject();
+        private JObject json;
         
         private static string marginTopKey = "bottom";
         private static string marginLeftKey = "right";
@@ -34,51 +34,51 @@ namespace Aoe2DEOverlay
         
         public double MarginTop { get {
             var token = json[marginTopKey];
-            if (token == null || token.Value<string>() == null) return 0;
+            if (token == null) return 0;
             var top = token.Value<double>();
             return top;
         } }
         
         public double MarginLeft { get {
             var token = json[marginLeftKey];
-            if (token == null || token.Value<string>() == null) return 0;
+            if (token == null) return 0;
             return token.Value<double>();
         } }
         
         public double MarginRight { get {
             var token = json[marginRightKey];
-            if (token == null || token.Value<string>() == null) return 0;
+            if (token == null) return 0;
             return token.Value<double>();
         } }
         
         public double MarginBottom { get {
             var token = json[marginBottomKey];
-            if (token == null || token.Value<string>() == null) return 0;
+            if (token == null) return 0;
             return token.Value<double>();
         } }
         
         public double FontSize { get {
             var token = json[fontSizeKey];
-            if (token == null || token.Value<string>() == null) return 0;
+            if (token == null) return 0;
             return token.Value<double>();
         } }
         
         public string Format1v1 { get {
             var token = json[format1v1Key];
-            if (token == null || token.Value<string>() == null) return "";
+            if (token?.Value<string>() == null) return "";
             return token.Value<string>();
         } }
         
         public string FormatTeam { get {
             var token = json[formatTeamKey];
-            if (token == null || token.Value<string>() == null) return "";
+            if (token?.Value<string>() == null) return "";
             return token.Value<string>();
         } }
         
         public Color Player1Color { get {
             var token = json[player1ColorKey];
             var p1color = Color.FromArgb(255, 60, 120, 255);
-            if (token == null || token.Value<string>() == null) return p1color;
+            if (token?.Value<string>() == null) return p1color;
             var color = (Color) (ColorConverter.ConvertFromString(token.Value<string>()) ?? p1color);
             return color;
         } }
@@ -86,7 +86,7 @@ namespace Aoe2DEOverlay
         public Color Player2Color { get {
             var token = json[player2ColorKey];
             var p2color = Color.FromArgb(255, 255, 20, 20);
-            if (token == null || token.Value<string>() == null) return p2color;
+            if (token?.Value<string>() == null) return p2color;
             var color = (Color) (ColorConverter.ConvertFromString(token.Value<string>()) ?? p2color);
             return color;
         } }
@@ -94,7 +94,7 @@ namespace Aoe2DEOverlay
         public Color Player3Color { get {
             var token = json[player3ColorKey];
             var p3color = Color.FromArgb(255, 20, 255, 20);
-            if (token == null || token.Value<string>() == null) return p3color;
+            if (token?.Value<string>() == null) return p3color;
             var color = (Color) (ColorConverter.ConvertFromString(token.Value<string>()) ?? p3color);
             return color;
         } }
@@ -102,7 +102,7 @@ namespace Aoe2DEOverlay
         public Color Player4Color { get {
             var token = json[player4ColorKey];
             var p4color = Color.FromArgb(255, 250, 250, 10);
-            if (token == null || token.Value<string>() == null) return p4color;
+            if (token?.Value<string>() == null) return p4color;
             var color = (Color) (ColorConverter.ConvertFromString(token.Value<string>()) ?? p4color);
             return color;
         } }
@@ -110,7 +110,7 @@ namespace Aoe2DEOverlay
         public Color Player5Color { get {
             var token = json[player5ColorKey];
             var p5color = Color.FromArgb(255, 40, 220, 195);
-            if (token == null || token.Value<string>() == null) return p5color;
+            if (token?.Value<string>() == null) return p5color;
             var color = (Color) (ColorConverter.ConvertFromString(token.Value<string>()) ?? p5color);
             return color;
         } }
@@ -118,7 +118,7 @@ namespace Aoe2DEOverlay
         public Color Player6Color { get {
             var token = json[player6ColorKey];
             var p6color = Color.FromArgb(255, 230, 110, 230);
-            if (token == null || token.Value<string>() == null) return p6color;
+            if (token?.Value<string>() == null) return p6color;
             var color = (Color) (ColorConverter.ConvertFromString(token.Value<string>()) ?? p6color);
             return color;
         } }
@@ -126,7 +126,7 @@ namespace Aoe2DEOverlay
         public Color Player7Color { get {
             var token = json[player7ColorKey];
             var p7color = Color.FromArgb(255, 210, 210, 210);
-            if (token == null || token.Value<string>() == null) return p7color;
+            if (token?.Value<string>() == null) return p7color;
             var color = (Color) (ColorConverter.ConvertFromString(token.Value<string>()) ?? p7color);
             return color;
         } }
@@ -134,7 +134,7 @@ namespace Aoe2DEOverlay
         public Color Player8Color { get {
             var token = json[player8ColorKey];
             var p8color = Color.FromArgb(255, 240, 170, 50);
-            if (token == null || token.Value<string>() == null) return p8color;
+            if (token?.Value<string>() == null) return p8color;
             var color = (Color) (ColorConverter.ConvertFromString(token.Value<string>()) ?? p8color);
             return color;
         } }
@@ -142,7 +142,7 @@ namespace Aoe2DEOverlay
         public Color BackgroundColor { get {
             var token = json[backgroundColorKey];
             var black = Color.FromArgb(187, 0, 0, 0);
-            if (token == null || token.Value<string>() == null) return black;
+            if (token?.Value<string>() == null) return black;
             var color = (Color) (ColorConverter.ConvertFromString(token.Value<string>()) ?? black);
             return color;
         } }
@@ -151,26 +151,26 @@ namespace Aoe2DEOverlay
         public Color BorderColor { get {
             var token = json[borderColorKey];
             var white = Color.FromArgb(128, 255, 255, 255);
-            if (token == null || token.Value<string>() == null) return white;
+            if (token?.Value<string>() == null) return white;
             var color = (Color) (ColorConverter.ConvertFromString(token.Value<string>()) ?? white);
             return color;
         } }
 
         public HorizontalAlignment Horizontal { get {
             var token = json[horizontalKey];
-            if (token == null || token.Value<string>() == null) return HorizontalAlignment.Center;
+            if (token?.Value<string>() == null) return HorizontalAlignment.Center;
             var horizontal = token.Value<string>();
-            if (horizontal.ToLower() == "left") return HorizontalAlignment.Left;
-            if (horizontal.ToLower() == "right") return HorizontalAlignment.Right;
+            if (horizontal?.ToLower() == "left") return HorizontalAlignment.Left;
+            if (horizontal?.ToLower() == "right") return HorizontalAlignment.Right;
             return HorizontalAlignment.Center;
         } }
         
         public VerticalAlignment Vertical { get {
             var token = json[verticalKey];
-            if (token == null || token.Value<string>() == null) return VerticalAlignment.Center;
-            var horizontal = token.Value<string>();
-            if (horizontal.ToLower() == "top") return VerticalAlignment.Top;
-            if (horizontal.ToLower() == "bottom") return VerticalAlignment.Bottom;
+            if (token?.Value<string>() == null) return VerticalAlignment.Center;
+            var vertical = token.Value<string>();
+            if (vertical?.ToLower() == "top") return VerticalAlignment.Top;
+            if (vertical?.ToLower() == "bottom") return VerticalAlignment.Bottom;
             return VerticalAlignment.Center;
         } }
 
