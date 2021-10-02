@@ -25,7 +25,7 @@ namespace Aoe2DEOverlay
         }
         
         private HttpClient http = new();
-        private Timer timer = new(5000);
+        private Timer timer = new(Setting.Instance.RefreshInterval);
         private string baseUrl = "https://aoe2.net/api/";
         
         public int ProfileId = -1;
@@ -55,6 +55,9 @@ namespace Aoe2DEOverlay
         {
             if(State.IsPending) return;
             State.IsPending = true;
+
+            timer.Interval = Setting.Instance.RefreshInterval;
+            
             var data = new Data();
             var lastMatchJson = await FetchLastmatch(ProfileId);
             if (lastMatchJson == null)
