@@ -65,15 +65,30 @@ namespace Aoe2DEOverlay
                 State.IsPending = false;
                 return;
             }
+            
             var matchId = lastMatchJson["last_match"]["match_id"].Value<int>();
             if (State.MatchId != matchId || !State.IsLoaded)
             {
+
+                var lastMatchWebJson = await FetchLastMatchWeb(ProfileId);
+                if (lastMatchWebJson == null)
+                {
+                    State.IsPending = false;
+                    return;
+                }
+                var webMatchId = lastMatchWebJson["id"].Value<int>();
+                if (matchId != webMatchId)
+                {
+                    State.IsPending = false;
+                    return;
+                }
                 State.IsLoaded = false;
                 var leaderboardId = lastMatchJson["last_match"]["leaderboard_id"].Value<int>();
                 data.LeaderboardId = leaderboardId;
                 data.MatchModeName = ((LeaderboardType) leaderboardId).ToModeName();
                 data.MatchModeShort = ((LeaderboardType) leaderboardId).ToModeShort();
-                data.Server = lastMatchJson["last_match"]["server"].Value<string>();
+                data.ServerKey = lastMatchJson["last_match"]["server"].Value<string>();
+                data.ServerName = lastMatchWebJson["server"].Value<string>();
                 
                 var playersJson = lastMatchJson["last_match"]["players"].Values<JObject>();
                 foreach (var playerJson in playersJson)
@@ -176,6 +191,14 @@ namespace Aoe2DEOverlay
             return await FetchJSON(url);
         }
 
+        private async Task<JToken> FetchLastMatchWeb(int profileId)
+        {
+            var url = $"https://aoe2.net/matches/aoe2de/{profileId}?count=1";
+            var json =  await FetchJSON(url);
+            var data = json["data"] as JArray;
+            return data?.Count > 0 ? data[0] : null;
+        }
+
         private async Task<JToken> FetchLeaderboard(int profileId, int leaderboardId)
         {
             var url = $"{baseUrl}leaderboard?game=aoe2de&profile_id={profileId}&leaderboard_id={leaderboardId}";
@@ -187,7 +210,6 @@ namespace Aoe2DEOverlay
             var url = $"{baseUrl}player/ratinghistory?game=aoe2de&profile_id={profileId}&leaderboard_id={leaderboardId}&count=1";
             return await FetchJSON(url);
         }
-
         private async Task<string> Fetch(string url)
         {
             var response = await http.GetAsync(url);

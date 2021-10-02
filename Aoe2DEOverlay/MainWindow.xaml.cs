@@ -91,7 +91,8 @@ namespace Aoe2DEOverlay
         private string ServerLabelText(Data data)
         {
             var text =  Setting.Instance.Server.Format;
-            text = text.Replace("{server}", $"{data.Server}");
+            text = text.Replace("{server.key}", $"{data.ServerKey}");
+            text = text.Replace("{server.name}", $"{data.ServerName}");
             text = text.Replace("{mode.name}", $"{data.MatchModeName}");
             text = text.Replace("{mode.short}", $"{data.MatchModeShort}");
             return text;
