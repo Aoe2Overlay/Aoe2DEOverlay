@@ -8,17 +8,17 @@ using Newtonsoft.Json.Linq;
 
 namespace Aoe2DEOverlay
 {
-    public class Service
+    public class LastMatchService
     {
-        public static Service Instance { get; } = new Service();
+        public static LastMatchService Instance { get; } = new LastMatchService();
 
         public IServiceObserver observer;
         
-        static Service()
+        static LastMatchService()
         {
         }
 
-        private Service()
+        private LastMatchService()
         {
             timer.Elapsed += Tick;
             timer.AutoReset = true;

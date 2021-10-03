@@ -11,9 +11,9 @@ namespace Aoe2DEOverlay
         {
             InitializeComponent();
             var settings = Setting.Instance;
-            Service.Instance.ProfileId = Setting.Instance.ProfileId;
-            Service.Instance.observer = this;
-            Service.Instance.Start();
+            LastMatchService.Instance.ProfileId = Setting.Instance.ProfileId;
+            LastMatchService.Instance.observer = this;
+            LastMatchService.Instance.Start();
             Setting.Instance.Observer = this;
             LoadingState();
             Changed();
@@ -53,7 +53,7 @@ namespace Aoe2DEOverlay
             LoadingLabel.Visibility = Visibility.Collapsed;
             ServerPanel.Visibility = Visibility.Visible;
             
-            ServerLabel.Content = ServerLabelText(Service.Instance.Data);
+            ServerLabel.Content = ServerLabelText(LastMatchService.Instance.Data);
             
             UpdateLabels(data);
         }
@@ -178,14 +178,14 @@ namespace Aoe2DEOverlay
                 return;
             }
             
-            if(Service.Instance.ProfileId != Setting.Instance.ProfileId) 
+            if(LastMatchService.Instance.ProfileId != Setting.Instance.ProfileId) 
             {
                 LoadingState();
-                Service.Instance.ProfileId = Setting.Instance.ProfileId;
+                LastMatchService.Instance.ProfileId = Setting.Instance.ProfileId;
             }
-            else if(Service.Instance.Data != null)
+            else if(LastMatchService.Instance.Data != null)
             {
-                Update(Service.Instance.Data);
+                Update(LastMatchService.Instance.Data);
             }
 
             RaitingPanel.Margin = new Thickness(Setting.Instance.Raiting.MarginLeft, Setting.Instance.Raiting.MarginTop, Setting.Instance.Raiting.MarginRight, Setting.Instance.Raiting.MarginBottom);
