@@ -36,6 +36,8 @@ Example:
 
 ## Formatting
 
+### Player Raiting
+
 It automatically detects if the match is RM or EW and loads the correct data for `1v1` and `team` accordingly.
 
 It is possible to display differently format for 1v1 (`format1v1`) or team (`formatTeam`) matches.
@@ -50,6 +52,7 @@ Example:
 | `{slot}`        | The match slot of the player                                    |
 | `{name}`        | Name of the player                                              |
 | `{country}`     | Country of the player                                           |
+| `{civ}`         | Civilisation the player plays                                   |
 | `{1v1.rank}`    | The leaderboard 1v1 rank position of the player                 |
 | `{1v1.elo}`     | The 1v1 elo points of the player                                |
 | `{1v1.rate}`    | The 1v1 win rate of the player                                  |
@@ -65,8 +68,25 @@ Example:
 | `{team.wins}`   | The number of team matches the player has won                   |
 | `{team.losses}` | The number of team matches the player has lost                  |
 
-## Theming
 
+### Match Info
+
+Example:
+
+    server: {
+        "format": "s: {server} m: {mode.name}",
+    }
+
+| Placeholder     | Description                                                                                        |
+| :-------------- | :------------------------------------------------------------------------------------------------- |
+| `{server.key}`  | The game server id of the match (example: `"eastus"`)                                              |
+| `{server.name}` | The game server name of the match (example: `"US (East)"`)                                         |
+| `{mode.name}`   | The mode name of the match Unranked, Deathmatch, Random Map, Empire Wars                           |
+| `{mode.short}`  | The mode short name of the match UR (Unranked), DM (Deathmatch), RM (Random Map), EW (Empire Wars) |
+| `{map.name}`    | The name of the current map played                                                                      |
+
+## Theming
+S
 The player and also the panel colours can be customised in the `setting.json`.
 The color can set to `backgroundColor`, `borderColor`, `player1Color`, …, `player8Color`.
 For RGB color use hex like `#3C78FF` (Red: `3C`, Green: `78`, Blue: `FF`).
