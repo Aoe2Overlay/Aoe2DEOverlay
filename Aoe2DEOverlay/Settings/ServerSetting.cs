@@ -17,6 +17,7 @@ namespace Aoe2DEOverlay
         private static string fontSizeKey = "fontSize";
         
         private static string formatDefault = "server: {server}";
+        private static double fontSizeDefault = 12.0;
 
         public ServerSetting(JObject json)
         {
@@ -24,6 +25,7 @@ namespace Aoe2DEOverlay
             json[marginLeftKey] = 0;
             json[marginRightKey] = 0;
             json[marginBottomKey] = 0;
+            json[fontSizeKey] = fontSizeDefault;
             json[formatKey] = formatDefault;
             json[horizontalKey] = "right";
             json[verticalKey] = "top";
@@ -63,7 +65,7 @@ namespace Aoe2DEOverlay
         
         public double FontSize { get {
             var token = json[fontSizeKey];
-            if (token?.Value<string>() == null) return 0;
+            if (token?.Value<string>() == null) return 12;
             return token.Value<double>();
         } }
         

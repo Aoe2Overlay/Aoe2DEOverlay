@@ -31,6 +31,7 @@ namespace Aoe2DEOverlay
         
         private static string format1v1Default = "P{slot} {name} <{country}> [#{1v1.rank} E:{1v1.elo} W:{1v1.rate} S:{1v1.streak} G:{1v1.games}]";
         private static string formatTeamDefault = "P{slot} {name} <{country}> [#{1v1.rank} E:{1v1.elo} W:{1v1.rate} S:{1v1.streak} G:{1v1.games}] (#{team.rank} E:{team.elo} W:{team.rate} S:{team.streak} G:{team.games})";
+        private static double fontSizeDefault = 12.0;
         
         public double MarginTop { get {
             var token = json[marginTopKey];
@@ -59,7 +60,7 @@ namespace Aoe2DEOverlay
         
         public double FontSize { get {
             var token = json[fontSizeKey];
-            if (token?.Value<string>() == null) return 0;
+            if (token?.Value<string>() == null) return fontSizeDefault;
             return token.Value<double>();
         } }
         
@@ -180,7 +181,7 @@ namespace Aoe2DEOverlay
             json[marginLeftKey] = 0;
             json[marginRightKey] = 0;
             json[marginBottomKey] = 0;
-            json[fontSizeKey] = 12;
+            json[fontSizeKey] = fontSizeDefault;
             json[horizontalKey] = "center";
             json[verticalKey] = "top";
             json[format1v1Key] = format1v1Default;
