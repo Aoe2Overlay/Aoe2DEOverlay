@@ -86,7 +86,7 @@ Example:
 | `{map.name}`    | The name of the current map played                                                                      |
 
 ## Theming
-S
+
 The player and also the panel colours can be customised in the `setting.json`.
 The color can set to `backgroundColor`, `borderColor`, `player1Color`, …, `player8Color`.
 For RGB color use hex like `#3C78FF` (Red: `3C`, Green: `78`, Blue: `FF`).
