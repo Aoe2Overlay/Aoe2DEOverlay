@@ -1,7 +1,13 @@
+<center>
+<img src="docs/img/icon.png" style="width: 128px;" />
+
 # Aoe2DEOverlay
-Aoe2 DE ELO Overlay
+
+Aoe2 DE ELO Overlay  
 
 ![screenshot](docs/img/example-screenshot.png)
+
+</center>
 
 ## Install Overlay
 
