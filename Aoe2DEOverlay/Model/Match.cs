@@ -2,7 +2,7 @@
 
 namespace Aoe2DEOverlay
 {
-    public class Data
+    public class Match
     {
         public int LeaderboardId;
         public string ServerKey;

@@ -2,6 +2,6 @@
 {
     public interface ISettingObserver
     {
-        void Changed();
+        void SettingChanged();
     }
 }

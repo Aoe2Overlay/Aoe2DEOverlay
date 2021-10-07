@@ -100,7 +100,7 @@ namespace Aoe2DEOverlay
         public void OnChanged(object source, FileSystemEventArgs e)  
         {  
             Load();
-            Observer?.Changed();
+            Observer?.SettingChanged();
         }  
         
 

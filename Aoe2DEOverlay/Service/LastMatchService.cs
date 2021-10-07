@@ -12,7 +12,7 @@ namespace Aoe2DEOverlay
     {
         public static LastMatchService Instance { get; } = new LastMatchService();
 
-        public IServiceObserver observer;
+        public ILastMatchObserver observer;
         
         static LastMatchService()
         {
@@ -24,12 +24,11 @@ namespace Aoe2DEOverlay
             timer.AutoReset = true;
         }
         
-        private HttpClient http = new();
         private Timer timer = new(Setting.Instance.RefreshInterval);
         private string baseUrl = "https://aoe2.net/api/";
         
         public int ProfileId = -1;
-        public Data Data { get; private set; } = null;
+        public Match Match { get; private set; } = null;
 
         private class ServiceState
         {
@@ -58,7 +57,7 @@ namespace Aoe2DEOverlay
 
             timer.Interval = Setting.Instance.RefreshInterval;
             
-            var data = new Data();
+            var data = new Match();
             var lastMatchJson = await FetchLastmatch(ProfileId);
             if (lastMatchJson == null)
             {
@@ -85,8 +84,8 @@ namespace Aoe2DEOverlay
                 State.IsLoaded = false;
                 var leaderboardId = lastMatchJson["last_match"]["leaderboard_id"].Value<int>();
                 data.LeaderboardId = leaderboardId;
-                data.MatchModeName = ((LeaderboardType) leaderboardId).ToModeName();
-                data.MatchModeShort = ((LeaderboardType) leaderboardId).ToModeShort();
+                data.MatchModeName = ((MatchType) leaderboardId).ToModeName();
+                data.MatchModeShort = ((MatchType) leaderboardId).ToModeShort();
                 data.ServerKey = lastMatchJson["last_match"]["server"].Value<string>();
                 data.ServerName = lastMatchWebJson["server"].Value<string>();
                 data.MapName = lastMatchWebJson["location"].Value<string>(); 
@@ -180,8 +179,8 @@ namespace Aoe2DEOverlay
                 
                 State.MatchId = matchId;
                 State.IsLoaded = true;
-                Data = data;
-                observer?.Update(Data);
+                Match = data;
+                observer?.UpdateMatch(Match);
             }
             State.IsPending = false;
         }
