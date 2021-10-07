@@ -16,7 +16,7 @@ namespace Aoe2DEOverlay
         private static string horizontalKey = "horizontal";
         private static string fontSizeKey = "fontSize";
         
-        private static string formatDefault = "server: {server}";
+        private static string formatDefault = "server: {server.name}";
 
         public ServerSetting(JObject json)
         {
@@ -24,6 +24,7 @@ namespace Aoe2DEOverlay
             json[marginLeftKey] = 0;
             json[marginRightKey] = 0;
             json[marginBottomKey] = 0;
+            json[fontSizeKey] = 12;
             json[formatKey] = formatDefault;
             json[horizontalKey] = "right";
             json[verticalKey] = "top";
