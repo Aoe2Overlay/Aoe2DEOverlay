@@ -28,7 +28,7 @@ namespace Aoe2DEOverlay
         
         public int ProfileId { get {
             var token = json[profileIdKey];
-            if (token == null) return -1;
+            if (token?.Value<string>() == null) return -1;
             return token.Value<int>();
         } }
         
