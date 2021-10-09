@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 
 namespace Aoe2DEOverlay
 {
-    public partial class MainWindow : Window, IServiceObserver, ISettingObserver
+    public partial class MainWindow : Window, ILastMatchObserver, ISettingObserver, IReleaseObserver
     {
+        private Timer updateAvailableTimer;
         public MainWindow()
         {
             InitializeComponent();
@@ -15,8 +18,10 @@ namespace Aoe2DEOverlay
             LastMatchService.Instance.observer = this;
             LastMatchService.Instance.Start();
             Setting.Instance.Observer = this;
+            ReleaseUpdateService.Instance.Observer = this;
             LoadingState();
-            Changed();
+            CheckReleases();
+            SettingChanged();
         }
         protected override void OnSourceInitialized(EventArgs e)
         {
@@ -24,11 +29,19 @@ namespace Aoe2DEOverlay
             var hwnd = new WindowInteropHelper(this).Handle;
             WindowHelper.SetWindowExTransparent(hwnd);
         }
+
+        public void CheckReleases()
+        {
+            //ReleaseUpdateService.Instance.observer = this;
+            ReleaseUpdateService.Instance.CheckRelease();
+        }
         
         public void LoadingState()
         {
             LoadingLabel.Visibility = Visibility.Visible; 
             LoadingLabel.Content = "Loading…";
+
+            UpdatePanel.Visibility = Visibility.Collapsed;
             
             P1Label.Visibility = Visibility.Collapsed; 
             P2Label.Visibility = Visibility.Collapsed; 
@@ -42,71 +55,71 @@ namespace Aoe2DEOverlay
             ServerPanel.Visibility = Visibility.Collapsed; 
         }
 
-        public void Update(Data data)
+        public void UpdateMatch(Match match)
         {
             if (!Dispatcher.CheckAccess())
             {
-                Dispatcher.BeginInvoke(new Action<Data>(Update), data);
+                Dispatcher.BeginInvoke(new Action<Match>(UpdateMatch), match);
                 return;
             }
             
             LoadingLabel.Visibility = Visibility.Collapsed;
             ServerPanel.Visibility = Visibility.Visible;
             
-            ServerLabel.Content = ServerLabelText(LastMatchService.Instance.Data);
+            ServerLabel.Content = ServerLabelText(LastMatchService.Instance.Match);
             
-            UpdateLabels(data);
+            UpdateLabels(match);
         }
 
-        public void UpdateLabels(Data data)
+        public void UpdateLabels(Match match)
         {
-            P1Label.Content = PlayerLabelText(data, 1);
-            P2Label.Content = PlayerLabelText(data, 2);
-            P3Label.Content = PlayerLabelText(data, 3);
-            P4Label.Content = PlayerLabelText(data, 4);
-            P5Label.Content = PlayerLabelText(data, 5);
-            P6Label.Content = PlayerLabelText(data, 6);
-            P7Label.Content = PlayerLabelText(data, 7);
-            P8Label.Content = PlayerLabelText(data, 8);
+            P1Label.Content = PlayerLabelText(match, 1);
+            P2Label.Content = PlayerLabelText(match, 2);
+            P3Label.Content = PlayerLabelText(match, 3);
+            P4Label.Content = PlayerLabelText(match, 4);
+            P5Label.Content = PlayerLabelText(match, 5);
+            P6Label.Content = PlayerLabelText(match, 6);
+            P7Label.Content = PlayerLabelText(match, 7);
+            P8Label.Content = PlayerLabelText(match, 8);
 
-            P1Label.Foreground = PlayerFontColor(data, 1);
-            P2Label.Foreground = PlayerFontColor(data, 2);
-            P3Label.Foreground = PlayerFontColor(data, 3);
-            P4Label.Foreground = PlayerFontColor(data, 4);
-            P5Label.Foreground = PlayerFontColor(data, 5);
-            P6Label.Foreground = PlayerFontColor(data, 6);
-            P7Label.Foreground = PlayerFontColor(data, 7);
-            P8Label.Foreground = PlayerFontColor(data, 8);
+            P1Label.Foreground = PlayerFontColor(match, 1);
+            P2Label.Foreground = PlayerFontColor(match, 2);
+            P3Label.Foreground = PlayerFontColor(match, 3);
+            P4Label.Foreground = PlayerFontColor(match, 4);
+            P5Label.Foreground = PlayerFontColor(match, 5);
+            P6Label.Foreground = PlayerFontColor(match, 6);
+            P7Label.Foreground = PlayerFontColor(match, 7);
+            P8Label.Foreground = PlayerFontColor(match, 8);
 
-            P1Label.Visibility = PlayerLabelVisible(data, 1);
-            P2Label.Visibility = PlayerLabelVisible(data, 2);
-            P3Label.Visibility = PlayerLabelVisible(data, 3);
-            P4Label.Visibility = PlayerLabelVisible(data, 4);
-            P5Label.Visibility = PlayerLabelVisible(data, 5);
-            P6Label.Visibility = PlayerLabelVisible(data, 6);
-            P7Label.Visibility = PlayerLabelVisible(data, 7);
-            P8Label.Visibility = PlayerLabelVisible(data, 8);
+            P1Label.Visibility = PlayerLabelVisible(match, 1);
+            P2Label.Visibility = PlayerLabelVisible(match, 2);
+            P3Label.Visibility = PlayerLabelVisible(match, 3);
+            P4Label.Visibility = PlayerLabelVisible(match, 4);
+            P5Label.Visibility = PlayerLabelVisible(match, 5);
+            P6Label.Visibility = PlayerLabelVisible(match, 6);
+            P7Label.Visibility = PlayerLabelVisible(match, 7);
+            P8Label.Visibility = PlayerLabelVisible(match, 8);
         }
 
-        private string ServerLabelText(Data data)
+        private string ServerLabelText(Match match)
         {
             var text =  Setting.Instance.Server.Format;
-            text = text.Replace("{server.key}", $"{data.ServerKey}");
-            text = text.Replace("{server.name}", $"{data.ServerName}");
-            text = text.Replace("{mode.name}", $"{data.MatchModeName}");
-            text = text.Replace("{mode.short}", $"{data.MatchModeShort}");
-            text = text.Replace("{map.name}", $"{data.MapName}");
+            text = text.Replace("{server.key}", $"{match.ServerKey}");
+            text = text.Replace("{server.name}", $"{match.ServerName}");
+            text = text.Replace("{mode.name}", $"{match.MatchModeName}");
+            text = text.Replace("{mode.short}", $"{match.MatchModeShort}");
+            text = text.Replace("{map.name}", $"{match.MapName}");
             return text;
         }
 
-        private string PlayerLabelText(Data data, int slot)
+        private string PlayerLabelText(Match match, int slot)
         {
-            if (data.players.Count < slot) return "";
+            if (match.players.Count < slot) return "";
             
-            var player = data.players[slot  - 1];
-            var m1v1 = data.LeaderboardId > 10 ? player.EW1v1 : player.RM1v1;
-            var mTeam = data.LeaderboardId > 10 ? player.EWTeam : player.RMTeam;
-            var text =  data.players.Count <= 2 ? Setting.Instance.Raiting.Format1v1 : Setting.Instance.Raiting.FormatTeam;
+            var player = match.players[slot  - 1];
+            var m1v1 = match.LeaderboardId > 10 ? player.EW1v1 : player.RM1v1;
+            var mTeam = match.LeaderboardId > 10 ? player.EWTeam : player.RMTeam;
+            var text =  match.players.Count <= 2 ? Setting.Instance.Raiting.Format1v1 : Setting.Instance.Raiting.FormatTeam;
 
             var streak1v1Prefix = m1v1.Streak > 0 ? "+" : mTeam.Streak == 0 ? " " : "";
             var streakTeamPrefix = mTeam.Streak > 0 ? "+" : mTeam.Streak == 0 ? " " : "";
@@ -136,10 +149,10 @@ namespace Aoe2DEOverlay
             return text;
         }
         
-        private Brush PlayerFontColor(Data data, int slot)
+        private Brush PlayerFontColor(Match match, int slot)
         {
-            if (data.players.Count < slot)  return new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
-            var p = data.players[slot  - 1];
+            if (match.players.Count < slot)  return new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
+            var p = match.players[slot  - 1];
             if (p.Color == 1) return new SolidColorBrush(Setting.Instance.Raiting.Player1Color);
             if (p.Color == 2) return new SolidColorBrush(Setting.Instance.Raiting.Player2Color);
             if (p.Color == 3) return new SolidColorBrush(Setting.Instance.Raiting.Player3Color);
@@ -164,17 +177,17 @@ namespace Aoe2DEOverlay
             P8Label.FontSize = size;
         }
         
-        private Visibility PlayerLabelVisible(Data data, int slot) 
+        private Visibility PlayerLabelVisible(Match match, int slot) 
         {
-            if (data.players.Count < slot) return Visibility.Collapsed;
+            if (match.players.Count < slot) return Visibility.Collapsed;
             return Visibility.Visible;
         }
 
-        public void Changed()
+        public void SettingChanged()
         {
             if (!Dispatcher.CheckAccess())
             {
-                Dispatcher.BeginInvoke(new Action(Changed));
+                Dispatcher.BeginInvoke(new Action(SettingChanged));
                 return;
             }
             
@@ -183,9 +196,9 @@ namespace Aoe2DEOverlay
                 LoadingState();
                 LastMatchService.Instance.ProfileId = Setting.Instance.ProfileId;
             }
-            else if(LastMatchService.Instance.Data != null)
+            else if(LastMatchService.Instance.Match != null)
             {
-                Update(LastMatchService.Instance.Data);
+                UpdateMatch(LastMatchService.Instance.Match);
             }
 
             RaitingPanel.Margin = new Thickness(Setting.Instance.Raiting.MarginLeft, Setting.Instance.Raiting.MarginTop, Setting.Instance.Raiting.MarginRight, Setting.Instance.Raiting.MarginBottom);
@@ -195,11 +208,41 @@ namespace Aoe2DEOverlay
             RaitingBorder.BorderBrush = new SolidColorBrush(Setting.Instance.Raiting.BorderColor);
             RaitingLabelFontSize(Setting.Instance.Raiting.FontSize);
 
-            
             ServerPanel.Margin = new Thickness(Setting.Instance.Server.MarginLeft, Setting.Instance.Server.MarginTop, Setting.Instance.Server.MarginRight, Setting.Instance.Server.MarginBottom);
             ServerPanel.HorizontalAlignment = Setting.Instance.Server.Horizontal;
             ServerPanel.VerticalAlignment = Setting.Instance.Server.Vertical;
             ServerLabel.FontSize = Setting.Instance.Server.FontSize;
+            
+            UpdatePanel.Margin = new Thickness(Setting.Instance.Update.MarginLeft, Setting.Instance.Update.MarginTop, Setting.Instance.Update.MarginRight, Setting.Instance.Update.MarginBottom);
+            UpdatePanel.HorizontalAlignment = Setting.Instance.Update.Horizontal;
+            UpdatePanel.VerticalAlignment = Setting.Instance.Update.Vertical;
+            UpdateLabel.FontSize = Setting.Instance.Update.FontSize;
+        }
+
+        public void UpdateAvailable(Version version)
+        {
+            UpdatePanel.Visibility = Visibility.Visible;
+            UpdateLabel.Content = $"New version available ({version.ToString()})";
+            
+            updateAvailableTimer = new Timer(Setting.Instance.Update.Duration);
+            updateAvailableTimer.Elapsed += UpdateAvailableTimerTick;
+            updateAvailableTimer.Enabled = true;
+        }
+
+        private void UpdateAvailableTimerTick(object sender, ElapsedEventArgs e)
+        {
+            HideUpdatePanel();
+            updateAvailableTimer = null;
+        }
+
+        private void HideUpdatePanel()
+        {
+            if (!Dispatcher.CheckAccess())
+            {
+                Dispatcher.BeginInvoke(new Action(HideUpdatePanel));
+                return;
+            }
+            UpdatePanel.Visibility = Visibility.Collapsed;
         }
     }
 }
