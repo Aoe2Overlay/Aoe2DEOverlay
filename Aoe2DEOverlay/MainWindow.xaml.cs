@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 
 namespace Aoe2DEOverlay
 {
-    public partial class MainWindow : Window, ILastMatchObserver, ISettingObserver
+    public partial class MainWindow : Window, ILastMatchObserver, ISettingObserver, IReleaseObserver
     {
+        private Timer updateAvailableTimer;
         public MainWindow()
         {
             InitializeComponent();
@@ -15,7 +18,9 @@ namespace Aoe2DEOverlay
             LastMatchService.Instance.observer = this;
             LastMatchService.Instance.Start();
             Setting.Instance.Observer = this;
+            ReleaseUpdateService.Instance.Observer = this;
             LoadingState();
+            CheckReleases();
             SettingChanged();
         }
         protected override void OnSourceInitialized(EventArgs e)
@@ -24,11 +29,19 @@ namespace Aoe2DEOverlay
             var hwnd = new WindowInteropHelper(this).Handle;
             WindowHelper.SetWindowExTransparent(hwnd);
         }
+
+        public void CheckReleases()
+        {
+            //ReleaseUpdateService.Instance.observer = this;
+            ReleaseUpdateService.Instance.CheckRelease();
+        }
         
         public void LoadingState()
         {
             LoadingLabel.Visibility = Visibility.Visible; 
             LoadingLabel.Content = "Loading…";
+
+            UpdatePanel.Visibility = Visibility.Collapsed;
             
             P1Label.Visibility = Visibility.Collapsed; 
             P2Label.Visibility = Visibility.Collapsed; 
@@ -195,11 +208,41 @@ namespace Aoe2DEOverlay
             RaitingBorder.BorderBrush = new SolidColorBrush(Setting.Instance.Raiting.BorderColor);
             RaitingLabelFontSize(Setting.Instance.Raiting.FontSize);
 
-            
             ServerPanel.Margin = new Thickness(Setting.Instance.Server.MarginLeft, Setting.Instance.Server.MarginTop, Setting.Instance.Server.MarginRight, Setting.Instance.Server.MarginBottom);
             ServerPanel.HorizontalAlignment = Setting.Instance.Server.Horizontal;
             ServerPanel.VerticalAlignment = Setting.Instance.Server.Vertical;
             ServerLabel.FontSize = Setting.Instance.Server.FontSize;
+            
+            UpdatePanel.Margin = new Thickness(Setting.Instance.Update.MarginLeft, Setting.Instance.Update.MarginTop, Setting.Instance.Update.MarginRight, Setting.Instance.Update.MarginBottom);
+            UpdatePanel.HorizontalAlignment = Setting.Instance.Update.Horizontal;
+            UpdatePanel.VerticalAlignment = Setting.Instance.Update.Vertical;
+            UpdateLabel.FontSize = Setting.Instance.Update.FontSize;
+        }
+
+        public void UpdateAvailable(Version version)
+        {
+            UpdatePanel.Visibility = Visibility.Visible;
+            UpdateLabel.Content = $"New version available ({version.ToString()})";
+            
+            updateAvailableTimer = new Timer(Setting.Instance.Update.Duration);
+            updateAvailableTimer.Elapsed += UpdateAvailableTimerTick;
+            updateAvailableTimer.Enabled = true;
+        }
+
+        private void UpdateAvailableTimerTick(object sender, ElapsedEventArgs e)
+        {
+            HideUpdatePanel();
+            updateAvailableTimer = null;
+        }
+
+        private void HideUpdatePanel()
+        {
+            if (!Dispatcher.CheckAccess())
+            {
+                Dispatcher.BeginInvoke(new Action(HideUpdatePanel));
+                return;
+            }
+            UpdatePanel.Visibility = Visibility.Collapsed;
         }
     }
 }

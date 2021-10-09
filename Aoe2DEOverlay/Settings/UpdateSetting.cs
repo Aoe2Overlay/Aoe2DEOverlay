@@ -1,13 +1,13 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using Newtonsoft.Json.Linq;
 
 namespace Aoe2DEOverlay
 {
-    class ServerSetting
+    public class UpdateSetting
     {
         private JObject json;
         
-        private static string formatKey = "format";
         private static string marginTopKey = "bottom";
         private static string marginLeftKey = "right";
         private static string marginRightKey = "left";
@@ -15,20 +15,21 @@ namespace Aoe2DEOverlay
         private static string verticalKey = "vertical";
         private static string horizontalKey = "horizontal";
         private static string fontSizeKey = "fontSize";
+        private static string prereleaseKey = "prerelease";
+        private static string waitingKey = "waiting";
+        private static string durationKey = "duration";
         
-        private static string formatDefault = "server: {server.name}";
-        private static double fontSizeDefault = 12.0;
+        private static double fontSizeDefault = 18.0;
 
-        public ServerSetting(JObject json)
+        public UpdateSetting(JObject json)
         {
             json[marginTopKey] = 0;
             json[marginLeftKey] = 0;
             json[marginRightKey] = 0;
             json[marginBottomKey] = 0;
             json[fontSizeKey] = fontSizeDefault;
-            json[formatKey] = formatDefault;
-            json[horizontalKey] = "right";
-            json[verticalKey] = "top";
+            json[horizontalKey] = "center";
+            json[verticalKey] = "center";
             
             this.json = json;
         }
@@ -68,16 +69,10 @@ namespace Aoe2DEOverlay
             if (token == null) return fontSizeDefault;
             return token.Value<double>();
         } }
-        
-        public string Format { get {
-            var token = json[formatKey];
-            if (token == null) return "";
-            return token.Value<string>();
-        } }
 
         public HorizontalAlignment Horizontal { get {
             var token = json[horizontalKey];
-            if (token == null || token.Value<string>() == null) return HorizontalAlignment.Center;
+            if (token?.Value<string>() == null) return HorizontalAlignment.Center;
             var horizontal = token.Value<string>();
             if (horizontal?.ToLower() == "left") return HorizontalAlignment.Left;
             if (horizontal?.ToLower() == "right") return HorizontalAlignment.Right;
@@ -86,11 +81,31 @@ namespace Aoe2DEOverlay
         
         public VerticalAlignment Vertical { get {
             var token = json[verticalKey];
-            if (token == null || token.Value<string>() == null) return VerticalAlignment.Center;
+            if (token?.Value<string>() == null) return VerticalAlignment.Bottom;
             var vertical = token.Value<string>();
             if (vertical?.ToLower() == "top") return VerticalAlignment.Top;
             if (vertical?.ToLower() == "bottom") return VerticalAlignment.Bottom;
             return VerticalAlignment.Center;
         } }
+        
+        public bool Prerelease { get {
+            var token = json[prereleaseKey];
+            if (token == null) return false;
+            return token.Value<bool>();
+        } }
+        
+        public bool Waiting { get {
+            var token = json[waitingKey];
+            if (token == null) return true;
+            return token.Value<bool>();
+        } }
+        
+        public int Duration { get {
+            var token = json[durationKey];
+            if (token == null) return 7000;
+            return Math.Max(1000, Math.Min(10000, token.Value<int>() * 1000));
+        } }
     }
+    
+    
 }

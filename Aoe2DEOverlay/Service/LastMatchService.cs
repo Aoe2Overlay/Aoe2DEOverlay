@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Net;
-using System.Net.Http;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
@@ -188,13 +186,13 @@ namespace Aoe2DEOverlay
         private async Task<JToken> FetchLastmatch(int profileId)
         {
             var url = $"{baseUrl}player/lastmatch?game=aoe2de&profile_id={profileId}";
-            return await FetchJSON(url);
+            return await Http.FetchJSON(url);
         }
 
         private async Task<JToken> FetchLastMatchWeb(int profileId)
         {
             var url = $"https://aoe2.net/matches/aoe2de/{profileId}?count=1";
-            var json =  await FetchJSON(url);
+            var json =  await Http.FetchJSON(url);
             var data = json["data"] as JArray;
             return data?.Count > 0 ? data[0] : null;
         }
@@ -202,41 +200,13 @@ namespace Aoe2DEOverlay
         private async Task<JToken> FetchLeaderboard(int profileId, int leaderboardId)
         {
             var url = $"{baseUrl}leaderboard?game=aoe2de&profile_id={profileId}&leaderboard_id={leaderboardId}";
-            return await FetchJSON(url);
+            return await Http.FetchJSON(url);
         }
 
         private async Task<JToken> FetchRatinghistory(int profileId, int leaderboardId)
         {
             var url = $"{baseUrl}player/ratinghistory?game=aoe2de&profile_id={profileId}&leaderboard_id={leaderboardId}&count=1";
-            return await FetchJSON(url);
-        }
-        private async Task<string> Fetch(string url)
-        {
-            var response = await http.GetAsync(url);
-            if (response.StatusCode != HttpStatusCode.OK) return null;
-            return await response.Content.ReadAsStringAsync();
-        }
-        private async Task<JToken> FetchJSON(string url)
-        {
-            try
-            {
-                var content = await Fetch(url);
-                content = content.Trim();
-                if (content.StartsWith("{") && content.EndsWith("}"))
-                {
-                    return JObject.Parse(content);
-                }
-
-                if (content.StartsWith("[") && content.EndsWith("]"))
-                {
-                    return JArray.Parse(content);
-                }
-            }
-            catch
-            {
-                // ignored
-            }
-            return null;
+            return await Http.FetchJSON(url);
         }
     }
 }
