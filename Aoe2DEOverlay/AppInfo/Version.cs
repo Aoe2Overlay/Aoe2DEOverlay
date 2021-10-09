@@ -67,6 +67,23 @@ namespace Aoe2DEOverlay
         public static bool operator >=(Version a, Version b) => GreaterEqualThan(a, b);
         public static bool operator <=(Version a, Version b) => LessEqualThan(a, b);
 
+        protected bool Equals(Version other)
+        {
+            return  Version.Equals(this, other);
+        }
+
+        public override bool Equals(object obj)
+        {
+            var version = obj as Version;
+            if (version == null) return false;
+            return Version.Equals(this, version);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Major, Minor, Patch, StageLabelNumber, StageNumber);
+        }
+
         private static bool Equals(Version a, Version b)
         {
             return a.Major == b.Major &&
@@ -116,7 +133,7 @@ namespace Aoe2DEOverlay
             return LessThan(a, b) || Equals(a, b);
         }
 
-        public string ToString()
+        public override string ToString()
         {
             var version = $"{Major}.{Minor}.{Patch}";
             if(StageLabel == Stage.Release) return version;
