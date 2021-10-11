@@ -54,7 +54,7 @@ namespace Aoe2DEOverlay
             
             Raiting = new RaitingSetting(raitingJson);
             Server = new ServerSetting(serverJson);
-            Update = new UpdateSetting(serverJson);
+            Update = new UpdateSetting(updateJson);
             
             json[profileIdKey] = null;
             json[refreshIntervalKey] = 5; // sec
