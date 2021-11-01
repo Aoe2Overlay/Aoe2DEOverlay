@@ -12,7 +12,6 @@ namespace Aoe2DEOverlay
         private static string updateKey = "update";
         
         private static string profileIdKey = "profileId";
-        private static string refreshIntervalKey = "refreshInterval";
         
         private JObject json = new JObject();
         
@@ -33,13 +32,6 @@ namespace Aoe2DEOverlay
             if (token?.Value<string>() == null) return -1;
             return token.Value<int>();
         } }
-        
-        public int RefreshInterval { get {
-            var token = json[refreshIntervalKey];
-            if (token?.Value<string>() == null) return 5000;
-            var value = token.Value<int>() * 1000;
-            return value < 1000 ? 1000 : value;
-        } }
         public static Setting Instance { get; } = new Setting();
 
         static Setting()
@@ -57,7 +49,6 @@ namespace Aoe2DEOverlay
             Update = new UpdateSetting(updateJson);
             
             json[profileIdKey] = null;
-            json[refreshIntervalKey] = 5; // sec
             json[raitingKey] = raitingJson;
             json[serverKey] = serverJson;
             json[updateKey] = updateJson;

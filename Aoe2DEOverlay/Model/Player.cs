@@ -3,6 +3,7 @@
     public class Player
     {
         public int Id;
+        public bool IsAi => Id == 0;
         public int Slot;
         public int Color;
         public string Name = "";

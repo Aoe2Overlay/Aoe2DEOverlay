@@ -4,12 +4,16 @@ namespace Aoe2DEOverlay
 {
     public class Match
     {
-        public int LeaderboardId;
+        public uint Started;
+        public bool HasAI = false;
+        public string Difficulty;
+        public bool IsMultiplayer;
+        public bool IsRanked;
         public string ServerKey;
         public string ServerName;
-        public string MatchModeName; // Random Map, Empire Wars, Unranked
-        public string MatchModeShort; // RM, EW, UR
+        public string GameTypeName; // Random Map, Empire Wars, Unranked
+        public string GameTypeShort; // RM, EW, UR
         public string MapName;
-        public List<Player> players = new (8);
+        public List<Player> Players = new (8);
     }
 }
