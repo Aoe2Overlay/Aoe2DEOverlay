@@ -30,14 +30,8 @@ namespace Aoe2DEOverlay
         {
             basePath = $"{homePath}\\Games\\Age of Empires 2 DE\\76561197961425297\\savegame";
             watcher.Path = basePath;
-            watcher.NotifyFilter = NotifyFilters.Attributes |  
-                                   NotifyFilters.CreationTime |  
-                                   NotifyFilters.DirectoryName |  
-                                   NotifyFilters.FileName |  
-                                   NotifyFilters.LastAccess |  
-                                   NotifyFilters.LastWrite |  
-                                   NotifyFilters.Security | 
-                                   NotifyFilters.Size;
+            watcher.NotifyFilter = NotifyFilters.CreationTime |
+                                   NotifyFilters.LastWrite;
             watcher.Changed += OnFileChanged;
             watcher.Filter = filter;  
             watcher.EnableRaisingEvents = true; 
