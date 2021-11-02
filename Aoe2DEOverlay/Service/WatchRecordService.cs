@@ -49,6 +49,7 @@ namespace Aoe2DEOverlay
             {
                 var after = (uint)File.GetLastWriteTime(file).Subtract(t1970).TotalSeconds;
                 if(before < after) OnChanged(file);
+                //OnChanged(file); debug
             };
             timer.Start();
         }
@@ -105,7 +106,7 @@ namespace Aoe2DEOverlay
         {
             var t1970 = new DateTime(1970, 1, 1);
             var record = new Aoe2Record();
-            record.Started =  (uint)File.GetCreationTime(path).Subtract(t1970).TotalSeconds; // +/- 5 seconds diff to aoe2.net
+            record.Started =  (uint)File.GetCreationTime(path).ToUniversalTime().Subtract(t1970).TotalSeconds; // +/- 5 seconds diff to aoe2.net
             byte[] fileBytes = ReadAllBytes(path);
             var memory = new MemoryStream(fileBytes);
             var reader = new BinaryReader(memory, Encoding.ASCII);

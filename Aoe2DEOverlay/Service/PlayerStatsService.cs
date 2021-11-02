@@ -28,7 +28,10 @@ namespace Aoe2DEOverlay
                         if(player.IsAi) continue;
                         UpdatePlayerWithState(player)
                             .GetAwaiter()
-                            .OnCompleted(() => Subscriber(recordMessage.Match));
+                            .OnCompleted(() =>
+                            {
+                                Subscriber(recordMessage.Match);
+                            });
                     }
                 }
             };
@@ -37,10 +40,13 @@ namespace Aoe2DEOverlay
 
         private async Task UpdatePlayerWithState(Player player)
         {
-            await UpdatePlayerWithRM1v1State(player);
-            await UpdatePlayerWithRMTeamState(player);
-            await UpdatePlayerWithEW1v1State(player);
-            await UpdatePlayerWithEWTeamState(player);
+            await Task.WhenAll(new[]
+            {
+                UpdatePlayerWithRM1v1State(player),
+                UpdatePlayerWithRMTeamState(player),
+                UpdatePlayerWithEW1v1State(player),
+                UpdatePlayerWithEWTeamState(player)
+            });
         }
 
         private async Task UpdatePlayerWithRM1v1State(Player player)

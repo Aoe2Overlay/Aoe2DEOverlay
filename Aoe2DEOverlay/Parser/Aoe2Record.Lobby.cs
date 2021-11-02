@@ -18,6 +18,7 @@ namespace ReadAoe2Recrod
             var population_limit_encoded = reader.ReadUInt32();
             var gameTypeId = reader.ReadByte();
             GameTypeName = ParseGameTypeName(gameTypeId);
+            GameTypeShort = ParseGameTypeShort(gameTypeId);
             var lockTeams = reader.ReadBoolean();
             var treatyLength = reader.ReadByte();
             var cheatCodesUsed = reader.ReadUInt32();

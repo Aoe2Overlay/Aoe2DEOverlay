@@ -28,7 +28,7 @@ namespace Aoe2DEOverlay
                 if (message is WatchRecordMessage recordMessage)
                 {
                     var match = recordMessage.Match;
-                    //UpdateMatchWithState(match);
+                    UpdateMatchWithState(match);
                 }
             };
         }
@@ -55,12 +55,14 @@ namespace Aoe2DEOverlay
             else
             {
                 count += 1;
-                if (count < 100)
+                if (count < 10000)
                 {
                     var timer = new Timer(5000);
+                    timer.AutoReset = false;
                     timer.Elapsed += (sender, args) =>
                     {
-                        UpdateMatchWithState(match, count++);
+                        timer.Stop();
+                        UpdateMatchWithState(match, count + 1);
                     };
                     timer.Start();
                 }
@@ -89,8 +91,11 @@ namespace Aoe2DEOverlay
             foreach (var playerJson in playersJson)
             {
                 var slot = playerJson["slot"].Value<int>();
-                var id = playerJson["profile_id"].Value<int>();
-                pIds[slot] = id;
+                var profileToken = playerJson["profile_id"];
+                if (profileToken == null) profileToken = playerJson["profileId"];
+                var id = 0;
+                if(profileToken != null)  id = profileToken.Value<int>();
+                pIds[slot-1] = id;
             }
             return ValidateMatch(match, started,
                 pIds[0], pIds[1],
@@ -101,7 +106,8 @@ namespace Aoe2DEOverlay
 
         private bool ValidateMatch(Match match, uint started, int p1Id, int p2Id, int p3Id, int p4Id, int p5Id, int p6Id, int p7Id, int p8Id)
         {
-            if (Math.Abs(match.Started - started) > 5) return false;
+            var result = Math.Abs(match.Started - started);
+            if (result > 10) return false;
             foreach (var player in match.Players)
             {
                 if (player.Slot == 1 && player.Id != p1Id) return false;
