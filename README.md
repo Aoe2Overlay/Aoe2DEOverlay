@@ -89,7 +89,8 @@ Example:
 | `{server.name}` | The game server name of the match (example: `"US (East)"`)                                         |
 | `{mode.name}`   | The mode name of the match Unranked, Deathmatch, Random Map, Empire Wars                           |
 | `{mode.short}`  | The mode short name of the match UR (Unranked), DM (Deathmatch), RM (Random Map), EW (Empire Wars) |
-| `{map.name}`    | The name of the current map played                                                                      |
+| `{map.name}`    | The name of the current map played                                                                 |
+| `{ranked}`      | Show if the match is `Ranked` or `Unranked`                                                        |
 
 ## Theming
 

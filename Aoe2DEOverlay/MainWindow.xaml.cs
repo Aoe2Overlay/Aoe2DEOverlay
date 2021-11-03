@@ -107,6 +107,7 @@ namespace Aoe2DEOverlay
             text = text.Replace("{server.name}", $"{match.ServerName}");
             text = text.Replace("{mode.name}", $"{match.GameTypeName}");
             text = text.Replace("{mode.short}", $"{match.GameTypeShort}");
+            text = text.Replace("{ranked}", $"{(match.IsRanked ? "Ranked" : "Unranked")}");
             text = text.Replace("{map.name}", $"{match.MapName}");
             return text;
         }
@@ -125,7 +126,7 @@ namespace Aoe2DEOverlay
 
             text = text.Replace("{slot}", $"{player.Slot}");
             text = text.Replace("{name}", $"{player.Name}");
-            text = text.Replace("{country}", $"{player.Country}");
+            text = text.Replace("{country}", $"{(player.Country.Length > 0 ? player.Country : "??")}");
             text = text.Replace("{civ}", $"{player.Civ}");
             text = text.Replace("{id}", $"{player.Id}");
             
