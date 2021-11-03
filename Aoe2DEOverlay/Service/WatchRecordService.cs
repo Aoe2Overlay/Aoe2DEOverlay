@@ -48,8 +48,8 @@ namespace Aoe2DEOverlay
             timer.Elapsed += (sender, args) =>
             {
                 var after = (uint)File.GetLastWriteTime(file).Subtract(t1970).TotalSeconds;
-                if(before < after) OnChanged(file);
-                //OnChanged(file); debug
+                //if(before < after) OnChanged(file);
+                OnChanged(file); // always show latest
             };
             timer.Start();
         }
