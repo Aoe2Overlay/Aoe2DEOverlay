@@ -2,6 +2,6 @@
 {
     public class Metadata
     {
-        public static Version Version = new Version("1.0.0-alpha.4");
+        public static Version Version = new Version("1.0.0-alpha.5");
     }
 }
