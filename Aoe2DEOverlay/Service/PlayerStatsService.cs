@@ -55,7 +55,7 @@ namespace Aoe2DEOverlay
             if(json == null) return;
             var jsonArray = json["leaderboard"].Values<JObject>().ToArray();
             var jsonObject = jsonArray.Length > 0 ? jsonArray.First() : null;
-            player.Country = jsonObject["country"].Value<string>();
+            player.Country = jsonObject["country"].Value<string>() ?? "";
             MapToRaiting(jsonObject, player.RM1v1);
         }
 
@@ -65,7 +65,7 @@ namespace Aoe2DEOverlay
             if(json == null) return;
             var jsonArray = json["leaderboard"].Values<JObject>().ToArray();
             var jsonObject = jsonArray.Length > 0 ? jsonArray.First() : null;
-            player.Country = jsonObject["country"].Value<string>();
+            player.Country = jsonObject["country"].Value<string>() ?? "";
             MapToRaiting(jsonObject, player.RMTeam);
         }
 
@@ -75,7 +75,7 @@ namespace Aoe2DEOverlay
             if(json == null) return;
             var jsonArray = json["leaderboard"].Values<JObject>().ToArray();
             var jsonObject = jsonArray.Length > 0 ? jsonArray.First() : null;
-            player.Country = jsonObject["country"].Value<string>();
+            player.Country = jsonObject["country"].Value<string>() ?? "";
             MapToRaiting(jsonObject, player.EW1v1);
         }
 
@@ -85,7 +85,7 @@ namespace Aoe2DEOverlay
             if(json == null) return;
             var jsonArray = json["leaderboard"].Values<JObject>().ToArray();
             var jsonObject = jsonArray.Length > 0 ? jsonArray.First() : null;
-            player.Country = jsonObject["country"].Value<string>();
+            player.Country = jsonObject["country"].Value<string>() ?? "";
             MapToRaiting(jsonObject, player.EWTeam);
         }
 
