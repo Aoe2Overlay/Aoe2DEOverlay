@@ -3,7 +3,7 @@
 
 # Aoe2DEOverlay
 
-Aoe2 DE ELO Overlay  
+Age of Empires 2 Definitive Edition Overlay  
 
 ![screenshot](docs/img/example-screenshot.png)
 
