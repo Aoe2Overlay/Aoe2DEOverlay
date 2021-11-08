@@ -190,18 +190,6 @@ namespace Aoe2DEOverlay
                 Dispatcher.BeginInvoke(new Action(SettingChanged));
                 return;
             }
-            
-            /*
-            if(LastMatchService.Instance.ProfileId != Setting.Instance.ProfileId) 
-            {
-                LoadingState();
-                LastMatchService.Instance.ProfileId = Setting.Instance.ProfileId;
-            }
-            else if(LastMatchService.Instance.Match != null)
-            {
-                UpdateMatch(LastMatchService.Instance.Match);
-            }
-            */
 
             RaitingPanel.Margin = new Thickness(Setting.Instance.Raiting.MarginLeft, Setting.Instance.Raiting.MarginTop, Setting.Instance.Raiting.MarginRight, Setting.Instance.Raiting.MarginBottom);
             RaitingPanel.HorizontalAlignment = Setting.Instance.Raiting.Horizontal;
