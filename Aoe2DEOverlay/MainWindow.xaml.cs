@@ -20,12 +20,10 @@ namespace Aoe2DEOverlay
         private Timer updateAvailableTimer;
         public MainWindow()
         {
-            #if RELEASE
             if (Metadata.HasSecret)
             {
                 AppCenter.Start(Metadata.Secret.AppCenterKey, typeof(Analytics), typeof(Crashes));
             }
-            #endif
             InitializeComponent();
             Setting.Instance.Observer = this;
             ReleaseUpdateService.Instance.Observer = this;
@@ -45,14 +43,13 @@ namespace Aoe2DEOverlay
 
         public void CheckReleases()
         {
-            //ReleaseUpdateService.Instance.observer = this;
             ReleaseUpdateService.Instance.CheckRelease();
         }
         
         public void LoadingState()
         {
             LoadingLabel.Visibility = Visibility.Visible; 
-            LoadingLabel.Content = "Loading…" + Metadata.HasSecret;
+            LoadingLabel.Content = "Loading…";
 
             UpdatePanel.Visibility = Visibility.Collapsed;
             

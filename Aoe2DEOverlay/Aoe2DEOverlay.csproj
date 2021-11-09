@@ -9,6 +9,7 @@
         <PackageId>Aoe2DEOverlay</PackageId>
         <Title>Aoe2DEOverlay</Title>
         <Authors />
+        <Version>1.0.0-alpha.5</Version>
         <PackageVersion>1.0.0-alpha.5</PackageVersion>
         <Nullable>disable</Nullable>
     </PropertyGroup>
