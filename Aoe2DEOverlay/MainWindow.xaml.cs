@@ -10,12 +10,7 @@ using Microsoft.AppCenter.Crashes;
 
 namespace Aoe2DEOverlay
 {
-    // App Center Analytics/Crashlytics 
-    // https://docs.microsoft.com/en-us/appcenter/sdk/getting-started/wpf-winforms
-    // 
-    // secret:
-    // https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-6.0&tabs=windows
-    public partial class MainWindow : Window, ILastMatchObserver, ISettingObserver, IReleaseObserver
+    public partial class MainWindow : Window, ISettingObserver, IReleaseObserver
     {
         private Timer updateAvailableTimer;
         public MainWindow()
