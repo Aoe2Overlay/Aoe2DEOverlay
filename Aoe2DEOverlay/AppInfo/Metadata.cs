@@ -6,7 +6,7 @@ namespace Aoe2DEOverlay
 {
     public class Metadata
     {
-        public static Version Version = new Version("1.0.0-alpha.5");
+        public static Version Version = new Version("1.0.0-alpha.6");
         public static ISecret Secret = CreateSecret();
         public static bool HasSecret = Secret != null;
 
