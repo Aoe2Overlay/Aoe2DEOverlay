@@ -4,14 +4,28 @@ using System.Timers;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 
 namespace Aoe2DEOverlay
 {
+    // App Center Analytics/Crashlytics 
+    // https://docs.microsoft.com/en-us/appcenter/sdk/getting-started/wpf-winforms
+    // 
+    // secret:
+    // https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-6.0&tabs=windows
     public partial class MainWindow : Window, ILastMatchObserver, ISettingObserver, IReleaseObserver
     {
         private Timer updateAvailableTimer;
         public MainWindow()
         {
+            #if RELEASE
+            if (Metadata.HasSecret)
+            {
+                AppCenter.Start(Metadata.Secret.AppCenterKey, typeof(Analytics), typeof(Crashes));
+            }
+            #endif
             InitializeComponent();
             Setting.Instance.Observer = this;
             ReleaseUpdateService.Instance.Observer = this;
@@ -38,7 +52,7 @@ namespace Aoe2DEOverlay
         public void LoadingState()
         {
             LoadingLabel.Visibility = Visibility.Visible; 
-            LoadingLabel.Content = "Loading…";
+            LoadingLabel.Content = "Loading…" + Metadata.HasSecret;
 
             UpdatePanel.Visibility = Visibility.Collapsed;
             
