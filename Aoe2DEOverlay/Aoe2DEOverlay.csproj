@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
         <TargetFramework>net5.0-windows</TargetFramework>
@@ -13,21 +12,64 @@
         <PackageVersion>1.0.0-alpha.6</PackageVersion>
         <Nullable>disable</Nullable>
     </PropertyGroup>
-
+    <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+        <!-- For " use &quot; -->
+        <Exec Command="dotnet-script &quot;$(ProjectDir)\..\scripts\build-manager.csx&quot;" />
+    </Target>
     <ItemGroup>
       <PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.4.0" />
       <PackageReference Include="Microsoft.AppCenter.Crashes" Version="4.4.0" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     </ItemGroup>
-
     <ItemGroup>
       <EmbeddedResource Include="icon.ico">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Parser" />
+    <ItemGroup  Condition="'$(RuntimeIdentifier)' == 'win-x64'">
+        <None Remove="UpdateManager\x64\UpdateManager.exe" />
+        <Content Include="UpdateManager\x64\UpdateManager.exe">
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="UpdateManager\x64\UpdateManager.pdb" />
+        <Content Include="UpdateManager\x64\UpdateManager.pdb">
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
-
+    <ItemGroup Condition="'$(RuntimeIdentifier)' == 'win-x86'">
+        <None Remove="UpdateManager\x86\UpdateManager.exe" />
+        <Content Include="UpdateManager\x86\UpdateManager.exe">
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="UpdateManager\x86\UpdateManager.pdb" />
+        <Content Include="UpdateManager\x86\UpdateManager.pdb">
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+    <ItemGroup  Condition="'$(BuildType)' != 'publish'">
+        <None Remove="UpdateManager\x64\UpdateManager.exe" />
+        <Content Include="UpdateManager\x64\UpdateManager.exe">
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="UpdateManager\x64\UpdateManager.pdb" />
+        <Content Include="UpdateManager\x64\UpdateManager.pdb">
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="UpdateManager\x86\UpdateManager.exe" />
+        <Content Include="UpdateManager\x86\UpdateManager.exe">
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="UpdateManager\x86\UpdateManager.pdb" />
+        <Content Include="UpdateManager\x86\UpdateManager.pdb">
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
 </Project>

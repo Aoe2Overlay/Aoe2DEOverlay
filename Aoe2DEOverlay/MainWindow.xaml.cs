@@ -10,6 +10,33 @@ using Microsoft.AppCenter.Crashes;
 
 namespace Aoe2DEOverlay
 {
+    /*
+     * TODO STATE
+     * AppState
+     * - check update
+     * - updating
+     * - installing (unpacking) & replace exe
+     * - error
+     * - ready
+     *
+     * if AppState.ready then:
+     * 
+     *     Aoe2NetPlayerState
+     *     - loading
+     *     - error
+     *     - ready
+     * 
+     *     Aoe2NetMatchState
+     *     - loading
+     *     - error
+     *     - ready
+     *
+     *     Aoe2RecordState
+     *     - reading
+     *     - error
+     *     - ready
+     * 
+     */
     public partial class MainWindow : Window, ISettingObserver, IReleaseObserver
     {
         private Timer updateAvailableTimer;
@@ -21,13 +48,17 @@ namespace Aoe2DEOverlay
             }
             InitializeComponent();
             Setting.Instance.Observer = this;
-            ReleaseUpdateService.Instance.Observer = this;
-            WatchRecordService.Instance.Subscriber += match => UpdateMatch(match);
-            PlayerStatsService.Instance.Subscriber += match =>  UpdateMatch(match);
-            MatchStateService.Instance.Subscriber += match =>  UpdateMatch(match);
+            //ReleaseUpdateService.Instance.Subscriber += version => UpdateAvailable(version);
+            WatchRecordService.Instance.OnMatchUpdate += match => UpdateMatch(match);
+            PlayerStatsService.Instance.OnPlayerUpdate += match =>  UpdateMatch(match);
+            MatchStateService.Instance.OnServerUpdate += match =>  UpdateMatch(match);
+            CheckUpdateService.Instance.OnNewVersion += (version, url) => UpdateAvailable(version);
+            var downloadUpdateService = DownloadUpdateService.Instance;
+            var installUpdateService = InstallUpdateService.Instance;
             LoadingState();
+            // TODO: CheckReleaseState if up to date then LoadingState()
             CheckReleases();
-            SettingChanged();
+            ApplySettings();
         }
         protected override void OnSourceInitialized(EventArgs e)
         {
@@ -38,7 +69,8 @@ namespace Aoe2DEOverlay
 
         public void CheckReleases()
         {
-            ReleaseUpdateService.Instance.CheckRelease();
+            CheckUpdateService.Instance.CheckRelease();
+            //ReleaseUpdateService.Instance.CheckRelease();
         }
         
         public void LoadingState()
@@ -197,6 +229,10 @@ namespace Aoe2DEOverlay
                 return;
             }
 
+            ApplySettings();
+        }
+        public void ApplySettings()
+        {
             RaitingPanel.Margin = new Thickness(Setting.Instance.Raiting.MarginLeft, Setting.Instance.Raiting.MarginTop, Setting.Instance.Raiting.MarginRight, Setting.Instance.Raiting.MarginBottom);
             RaitingPanel.HorizontalAlignment = Setting.Instance.Raiting.Horizontal;
             RaitingPanel.VerticalAlignment = Setting.Instance.Raiting.Vertical;

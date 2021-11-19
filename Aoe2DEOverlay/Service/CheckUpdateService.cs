@@ -1,39 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Net;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-/*
 namespace Aoe2DEOverlay
 {
-    public delegate void ReleaseUpdate(Version version);
-    public class ReleaseUpdateService
-    {
+    public delegate void OnNewVersion(Version version, string url);
+    public class CheckUpdateService {
+        public static CheckUpdateService Instance { get; } = new ();
         
-        public static ReleaseUpdateService Instance { get; } = new();
-        
-        private WebClient client = new();
-
-        public ReleaseUpdate Subscriber;
-        
-        static ReleaseUpdateService()
+        static CheckUpdateService()
         {
         }
 
-        private ReleaseUpdateService()
+        private CheckUpdateService()
         {
-            client.DownloadProgressChanged += (sender, args) =>
-            {
-                Console.WriteLine($"zip progress {args.ProgressPercentage}%");
-            };
-            client.DownloadFileCompleted += (sender, args) =>
-            {
-                Console.WriteLine("zip downloaded");
-            };
         }
+
+        public OnNewVersion OnNewVersion;
+        
 
         public async void CheckRelease()
         {
@@ -58,13 +43,17 @@ namespace Aoe2DEOverlay
                 var delta = (now - date).TotalHours;
                 var waiting = Setting.Instance.Update.Waiting;
                 if(delta < 1 && Setting.Instance.Update.Waiting) continue;
-                DownloadReleaase(json);
+                var url = ParseDownloadUrl(json);
+                if(url != null)
+                {
+                    OnNewVersion(version, url);
+                }
                 break;
             }
             
         }
 
-        public void DownloadReleaase(JToken json)
+        public string ParseDownloadUrl(JToken json)
         {
             var assets = json["assets"].Values<JObject>();
             foreach (var asset in assets)
@@ -73,29 +62,11 @@ namespace Aoe2DEOverlay
                 var platform = Metadata.platform.ToString();
                 if(name == $"{platform}.zip")
                 {
-                    var url = asset["browser_download_url"]?.Value<string>() ?? "";
-                    DownloadZip(url, name);
-                    //UnzipRelease();
+                    return asset["browser_download_url"]?.Value<string>() ?? "";
                 }
             }
-        }
 
-        private void DownloadZip(string url, string fileName)
-        {
-            var basePath = System.IO.Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
-            var filePath = $"{basePath}/update/{fileName}";
-            client.DownloadFileAsync(new Uri(url), filePath);
-        }
-
-        private void UnzipRelease()
-        {
-            var platform = Metadata.platform.ToString();
-            var fileName = $"{platform}.zip";
-            var basePath = System.IO.Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
-            var zipPath = $"{basePath}/update/{fileName}";
-            var extractPath = $"{basePath}/update/{platform}";
-            // https://stackoverflow.com/questions/836736/unzip-files-programmatically-in-net
-            System.IO.Compression.ZipFile.ExtractToDirectory(zipPath, extractPath);
+            return null;
         }
 
         private async Task<JToken> FetchReleases()
@@ -107,7 +78,5 @@ namespace Aoe2DEOverlay
             };
             return await Http.FetchJSON(url, headers);
         }
-
     }
 }
-*/
