@@ -26,7 +26,7 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
     </ItemGroup>
-    <ItemGroup  Condition="'$(RuntimeIdentifier)' == 'win-x64'">
+    <ItemGroup Condition="'$(RuntimeIdentifier)' == 'win-x64'">
         <None Remove="UpdateManager\x64\UpdateManager.exe" />
         <Content Include="UpdateManager\x64\UpdateManager.exe">
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
@@ -50,7 +50,7 @@
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
-    <ItemGroup  Condition="'$(BuildType)' != 'publish'">
+    <ItemGroup Condition="'$(BuildType)' != 'publish'">
         <None Remove="UpdateManager\x64\UpdateManager.exe" />
         <Content Include="UpdateManager\x64\UpdateManager.exe">
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>

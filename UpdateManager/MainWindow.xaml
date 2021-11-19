@@ -5,7 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UpdateManager"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Aoe2DEOverlay"
+        Background="Transparent"
+        AllowsTransparency="True"
+        WindowStyle="None"
+        WindowState="Maximized" 
+        ResizeMode="NoResize"
+        Topmost="True"
+        >
     <Grid>
 
     </Grid>
