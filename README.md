@@ -9,10 +9,6 @@ Age of Empires 2 Definitive Edition Overlay
 
 </div>
 
-## Known issue
-
-It not working since Aoe2 November 2021 update. (Bugfix in progress)
-
 ## Install Overlay
 
 For an easy installation the latest version can be downloaded from github [releases](https://github.com/kickass-panda/Aoe2DEOverlay/releases). There is a x64 (64-bit CPU) or x86 (32-bit CPU) version. Unzip the file and copy the folder to a desired location. 
