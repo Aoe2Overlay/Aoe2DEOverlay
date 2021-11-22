@@ -75,6 +75,7 @@ namespace Aoe2DEOverlay
             catch (Exception exception)
             {
                 lastFile = "";
+                // TODO: create OnMatchError delegate to show it in the UI
             }
         } 
         

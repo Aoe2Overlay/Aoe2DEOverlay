@@ -109,11 +109,11 @@ namespace ReadAoe2Recrod
             return array;
         }
 
-        public static void Find(BinaryReader reader, byte[] pattern, int offset=0)
+        public static bool Find(BinaryReader reader, byte[] pattern, int offset=0)
         {
             var i = 0;
             var match = false;
-            while (!match && reader.BaseStream.Position != reader.BaseStream.Length)
+            while (!match && reader.BaseStream.Position < reader.BaseStream.Length)
             {
                 if (reader.ReadChar() == pattern[i])
                 {
@@ -125,7 +125,7 @@ namespace ReadAoe2Recrod
                 }
                 else 
                 {
-                    if(i > 1) reader.BaseStream.Seek(i - 1, SeekOrigin.Current);
+                    if(i > 0) reader.BaseStream.Seek(-i, SeekOrigin.Current);
                     i = 0;
                 }
             }
@@ -134,6 +134,8 @@ namespace ReadAoe2Recrod
             {
                 reader.BaseStream.Seek(offset, SeekOrigin.Current);
             }
+
+            return match;
         }
 
         public static void Padding(BinaryReader reader, int number)
