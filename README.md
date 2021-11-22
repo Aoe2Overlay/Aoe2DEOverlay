@@ -3,11 +3,15 @@
 
 # Aoe2DEOverlay
 
-Aoe2 DE ELO Overlay  
+Age of Empires 2 Definitive Edition Overlay  
 
 ![screenshot](docs/img/example-screenshot.png)
 
 </div>
+
+## Known issue
+
+It not working since Aoe2 November 2021 update. (Bugfix in progress)
 
 ## Install Overlay
 

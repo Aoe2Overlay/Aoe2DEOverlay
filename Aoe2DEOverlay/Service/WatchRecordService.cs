@@ -72,7 +72,7 @@ namespace Aoe2DEOverlay
                 var message = new WatchRecordMessage(match);
                 MessageBus.Instance.Subscriber(message);
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 lastFile = "";
                 // TODO: create OnMatchError delegate to show it in the UI
