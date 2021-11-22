@@ -15,7 +15,7 @@ namespace ReadAoe2Recrod
             var revealMapId = reader.ReadUInt32();
             var fogOfWar = BoolUInt32(reader);
             var mapSize = reader.ReadUInt32();
-            var population_limit_encoded = reader.ReadUInt32();
+            var populationLimitEncoded = reader.ReadUInt32();
             var gameTypeId = reader.ReadByte();
             GameTypeName = ParseGameTypeName(gameTypeId);
             GameTypeShort = ParseGameTypeShort(gameTypeId);

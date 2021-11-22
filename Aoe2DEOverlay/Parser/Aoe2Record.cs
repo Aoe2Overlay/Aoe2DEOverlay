@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using System.Text;
+
 namespace ReadAoe2Recrod
 {
     public partial class Aoe2Record
@@ -22,17 +24,16 @@ namespace ReadAoe2Recrod
             ReadLobby(reader);
             reader.Close();
         }
-
-
+        
         public void SkipToEndOfScenario(BinaryReader reader)
         {
             // skip to end of game settings at scenario
-            var pattern = new byte[] { 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x03, 0x40 };
-            Find(reader, pattern);
-            if (reader.BaseStream.Length == reader.BaseStream.Position)
+            var pattern = new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0x40 };
+           if (!Find(reader, pattern))
             {
                 throw new Exception("ERROR: scenario end not found!");
             }
+            
             // skip triggers of scenario
             Padding(reader, 1);
             Padding(reader, 4);// var numOTriggers = reader.ReadUInt32();
