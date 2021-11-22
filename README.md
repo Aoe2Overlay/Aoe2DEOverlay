@@ -9,10 +9,6 @@ Age of Empires 2 Definitive Edition Overlay
 
 </div>
 
-## Known issue
-
-It not working since Aoe2 November 2021 update. (Bugfix in progress)
-
 
 ## Install Overlay
 

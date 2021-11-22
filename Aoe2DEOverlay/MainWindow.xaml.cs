@@ -4,14 +4,21 @@ using System.Timers;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 
 namespace Aoe2DEOverlay
 {
-    public partial class MainWindow : Window, ILastMatchObserver, ISettingObserver, IReleaseObserver
+    public partial class MainWindow : Window, ISettingObserver, IReleaseObserver
     {
         private Timer updateAvailableTimer;
         public MainWindow()
         {
+            if (Metadata.HasSecret)
+            {
+                AppCenter.Start(Metadata.Secret.AppCenterKey, typeof(Analytics), typeof(Crashes));
+            }
             InitializeComponent();
             Setting.Instance.Observer = this;
             ReleaseUpdateService.Instance.Observer = this;
@@ -31,7 +38,6 @@ namespace Aoe2DEOverlay
 
         public void CheckReleases()
         {
-            //ReleaseUpdateService.Instance.observer = this;
             ReleaseUpdateService.Instance.CheckRelease();
         }
         
@@ -190,18 +196,6 @@ namespace Aoe2DEOverlay
                 Dispatcher.BeginInvoke(new Action(SettingChanged));
                 return;
             }
-            
-            /*
-            if(LastMatchService.Instance.ProfileId != Setting.Instance.ProfileId) 
-            {
-                LoadingState();
-                LastMatchService.Instance.ProfileId = Setting.Instance.ProfileId;
-            }
-            else if(LastMatchService.Instance.Match != null)
-            {
-                UpdateMatch(LastMatchService.Instance.Match);
-            }
-            */
 
             RaitingPanel.Margin = new Thickness(Setting.Instance.Raiting.MarginLeft, Setting.Instance.Raiting.MarginTop, Setting.Instance.Raiting.MarginRight, Setting.Instance.Raiting.MarginBottom);
             RaitingPanel.HorizontalAlignment = Setting.Instance.Raiting.Horizontal;
