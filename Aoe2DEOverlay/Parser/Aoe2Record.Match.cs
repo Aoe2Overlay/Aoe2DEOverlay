@@ -61,16 +61,18 @@ namespace ReadAoe2Recrod
             var fogOfWar = reader.ReadBoolean();
             var cheatNotifications = reader.ReadBoolean();
             var coloredChat = reader.ReadBoolean();
+            Padding(reader, 1); // since aoe2 patch november 2021 (Update 56005)
             Padding(reader, 9);
             Padding(reader, 4); // separator
             IsRanked = reader.ReadBoolean();
             Padding(reader, 11);
             Padding(reader, 5);
+            
             var strings = new string[23];
             for (int i = 0; i < 23; i++)
             {
                 strings[i] = DEString(reader);
-                while (new uint[] {3, 21, 23, 42, 44, 45, 46}.Contains(reader.ReadUInt32())){}
+                while (new uint[] {3, 21, 23, 42, 44, 45, 46, 47}.Contains(reader.ReadUInt32())){}
             }
             Padding(reader, 59*4); // skip strategic_numbers ArrayInt32(reader, 59)
             var num_ai_files = (int)reader.ReadUInt64();
@@ -80,10 +82,13 @@ namespace ReadAoe2Recrod
                 DEString(reader);
                 Padding(reader, 4);
             }
+            
             Padding(reader, 24);
-            var lobby_name = DEString(reader);
-            var modded_dataset = DEString(reader);
-            Padding(reader, 42);
+            var lobbyName = DEString(reader);
+            var moddedDataset = DEString(reader);
+            Padding(reader, 23); // since aoe2 patch november 2021 (Update 56005)
+            DEString(reader);
+            Padding(reader, 36); // since aoe2 patch november 2021 (Update 56005)
             DEString(reader);
             Padding(reader, 8);
         }

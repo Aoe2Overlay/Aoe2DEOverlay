@@ -11,39 +11,43 @@ namespace ReadAoe2Recrod
         private void ReadPlayers(BinaryReader reader)
         {
             Padding(reader, 8);
-            Padding(reader, 4); // separator
+            Padding(reader, 4); // separatorosition;
             
             var players = new List<RecordPlayer>(8); 
             for (int i = 0; i < 8; i++)
             {
                 var player = new RecordPlayer();
-            
-                var dlc_id  = reader.ReadUInt32();
+
+                Padding(reader, 1); // since aoe2 patch november 2021 (Update 56005)
+                
+                var dlcId  = reader.ReadUInt32();
                 var colorId = reader.ReadInt32();
                 player.Color = colorId + 1;
-                var selected_color  = reader.ReadByte();
-                var selected_team_id  = reader.ReadByte();
-                var resolved_team_id  = reader.ReadByte();
-                var dat_crc = reader.ReadBytes(8);
-                var mp_game_version  = reader.ReadByte();
+                var selectedColor  = reader.ReadByte();
+                var selectedTeamId  = reader.ReadByte();
+                var resolvedTeamId  = reader.ReadByte();
+                var datCrc = reader.ReadBytes(8);
+                var mpGameVersion  = reader.ReadByte();
                 var civId  = reader.ReadUInt32();
                 player.Civ = ParseCiv(civId);
-                var ai_type = DEString(reader);
-                var ai_civ_name_index = reader.ReadByte();
-                var ai_name = DEString(reader);
+                var aiType = DEString(reader);
+                var aiCiv_name_index = reader.ReadByte();
+                var aiName = DEString(reader);
                 var name = DEString(reader);
-                player.Name = name.Length > 0 ? name : ai_name;
-                var type_id = reader.ReadUInt32();
-                var type = ParseType(type_id);
+                player.Name = name.Length > 0 ? name : aiName;
+                var typeId = reader.ReadUInt32();
+                var type = ParseType(typeId);
                 player.ProfileId = reader.ReadUInt32();
                 Padding(reader, 4);
                 player.Slot = reader.ReadInt32();
-                var hd_rm_elo  = reader.ReadUInt32();
-                var hd_dm_elo  = reader.ReadUInt32();
-                var animated_destruction_enabled  = reader.ReadBoolean();
-                var custom_ai  = reader.ReadBoolean();
+                var hdRmElo  = reader.ReadUInt32();
+                var hdDmElo  = reader.ReadUInt32();
+                var animatedDestructionEnabled  = reader.ReadBoolean();
+                var customAi  = reader.ReadBoolean();
                 
-                if(type_id != 1 /* is not closed */ ) players.Add(player);
+                Padding(reader, 7); // since aoe2 patch november 2021 (Update 56005)
+                
+                if(typeId != 1 /* is not closed */ ) players.Add(player);
             }
             Players = players.ToArray();
         }

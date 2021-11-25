@@ -12,6 +12,7 @@ namespace ReadAoe2Recrod
             // NOT IMPLEMENTED 
             throw new Exception("ERROR: initial reader not implemented!");
             
+            /*
             var restoreTime = reader.ReadUInt32(); // '0' for non-restored
             var numParticles = reader.ReadUInt32();
             var particles = reader.ReadBytes((int)numParticles * 27);
@@ -25,7 +26,6 @@ namespace ReadAoe2Recrod
                 // start of objects
                 Find(reader, new byte[]{ 0x0b,0x00,0x00,0x00,0x02,0x00,0x00});
                 
-                /*
                 if (restoreTime == 0)
                 {
                     Find(reader, new byte[] {0x00}, -1);
@@ -46,12 +46,12 @@ namespace ReadAoe2Recrod
                         Const(reader, new byte[] { 0x00, 0x0b });
                     }
                 }
-                */
                 
                 //GotoObjectsEnd(reader);
                 
             }
             Padding(reader, 21);
+                */
         }
 
         public void GotoObjectsEnd(BinaryReader reader)
