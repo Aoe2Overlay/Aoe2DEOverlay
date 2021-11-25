@@ -8,8 +8,8 @@
         <PackageId>Aoe2DEOverlay</PackageId>
         <Title>Aoe2DEOverlay</Title>
         <Authors />
-        <Version>1.0.0-alpha.6</Version>
-        <PackageVersion>1.0.0-alpha.6</PackageVersion>
+        <Version>1.0.0-alpha.7</Version>
+        <PackageVersion>1.0.0-alpha.7</PackageVersion>
         <Nullable>disable</Nullable>
     </PropertyGroup>
     <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
@@ -36,6 +36,10 @@
         <Content Include="UpdateManager\x64\UpdateManager.pdb">
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="splash.png" />
+        <Content Include="splash.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
     <ItemGroup Condition="'$(RuntimeIdentifier)' == 'win-x86'">
@@ -71,5 +75,11 @@
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
+    </ItemGroup>
+    <ItemGroup>
+      <None Remove="splash.png" />
+      <Resource Include="splash.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
     </ItemGroup>
 </Project>

@@ -139,7 +139,7 @@ namespace Aoe2DEOverlay
             if(StageLabel == Stage.Release) return version;
             var stage = new string[] { "alpha", "beta", "rc", ""};
             version += $"-{stage[StageLabelNumber]}";
-            if (StageNumber > 0) version += $".{StageNumber}."; 
+            if (StageNumber > 0) version += $".{StageNumber}"; 
             return version;
         }
     }
