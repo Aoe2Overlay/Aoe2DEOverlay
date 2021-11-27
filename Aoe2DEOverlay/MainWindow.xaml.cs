@@ -37,7 +37,7 @@ namespace Aoe2DEOverlay
      *     - ready
      * 
      */
-    public partial class MainWindow : Window, ISettingObserver, IReleaseObserver
+    public partial class MainWindow : Window, ISettingObserver
     {
         private Timer updateAvailableTimer;
         public MainWindow()
@@ -70,7 +70,6 @@ namespace Aoe2DEOverlay
         public void CheckReleases()
         {
             CheckUpdateService.Instance.CheckRelease();
-            //ReleaseUpdateService.Instance.CheckRelease();
         }
         
         public void LoadingState()
@@ -101,7 +100,6 @@ namespace Aoe2DEOverlay
             }
             
             LoadingLabel.Visibility = Visibility.Collapsed;
-            SplashPanel.Visibility = Visibility.Hidden;
             ServerPanel.Visibility = Visibility.Visible;
             
             ServerLabel.Content = ServerLabelText(match);
@@ -250,16 +248,6 @@ namespace Aoe2DEOverlay
             UpdatePanel.HorizontalAlignment = Setting.Instance.Update.Horizontal;
             UpdatePanel.VerticalAlignment = Setting.Instance.Update.Vertical;
             UpdateLabel.FontSize = Setting.Instance.Update.FontSize;
-
-            SplashPanel.Margin = new Thickness(0, -300, 0, 0);
-            SplashPanel.HorizontalAlignment = HorizontalAlignment.Center;
-            SplashPanel.VerticalAlignment = VerticalAlignment.Center;
-            
-            SplashVersionLabel.FontSize = 14;
-            SplashVersionLabel.Margin = new Thickness(0, 20, 0, 0);
-            SplashVersionLabel.Content = Metadata.Version.ToString();
-            
-            SplashTitleLabel.FontSize = 20;
         }
 
         public void UpdateAvailable(Version version)

@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 namespace Aoe2DEOverlay
 {
     public delegate void OnNewVersion(Version version, string url);
+    public delegate void OnNoUpdates();
     public class CheckUpdateService {
         public static CheckUpdateService Instance { get; } = new ();
         
@@ -18,6 +19,7 @@ namespace Aoe2DEOverlay
         }
 
         public OnNewVersion OnNewVersion;
+        public OnNoUpdates OnNoUpdates;
         
 
         public async void CheckRelease()
@@ -25,6 +27,8 @@ namespace Aoe2DEOverlay
             var jarray = await FetchReleases() as JArray;
             
             if(jarray == null) return;
+
+            var hasNewVersion = false;
 
             foreach (var json in jarray)
             {
@@ -46,11 +50,12 @@ namespace Aoe2DEOverlay
                 var url = ParseDownloadUrl(json);
                 if(url != null)
                 {
+                    hasNewVersion = true;
                     OnNewVersion(version, url);
                 }
                 break;
             }
-            
+            if(!hasNewVersion) OnNoUpdates();
         }
 
         public string ParseDownloadUrl(JToken json)

@@ -14,6 +14,11 @@
         Topmost="True"
         >
     <Grid>
-
+        <StackPanel>
+            <!--
+            <Label Name="Debug1Label" Content="DEBUG"></Label>
+            <Label Name="Debug2Label" Content="DEBUG"></Label>
+            -->
+        </StackPanel>
     </Grid>
 </Window>

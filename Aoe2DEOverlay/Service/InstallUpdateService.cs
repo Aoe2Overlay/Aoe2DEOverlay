@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.IO;
 using System.IO.Compression;
 using System.Threading.Tasks;
 
@@ -33,9 +34,10 @@ namespace Aoe2DEOverlay
             var zipFile = $"{platform}.zip";
             var basePath = System.IO.Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
             var zipPath = $"{basePath}/update/{zipFile}";
-            var dirPath = $"{basePath}/update/{platform}";
+            var dirPath = $"{basePath}/update";
+            var jsonPath = $"{dirPath}/{platform}/setting.json";
             await Task.Run(() => ZipFile.ExtractToDirectory(zipPath, dirPath));
-
+            if(File.Exists(jsonPath)) File.Delete(jsonPath);
         }
 
         private void StartUpdateManager()

@@ -12,7 +12,7 @@
         <PackageVersion>1.0.0-alpha.7</PackageVersion>
         <Nullable>disable</Nullable>
     </PropertyGroup>
-    <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Target Name="PreBuild" BeforeTargets="PrepareResources">
         <!-- For " use &quot; -->
         <Exec Command="dotnet-script &quot;$(ProjectDir)\..\scripts\build-manager.csx&quot;" />
     </Target>
