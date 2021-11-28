@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using System.Windows.Interop;
@@ -7,6 +6,7 @@ using System.Windows.Media;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
+using Timer = System.Timers.Timer;
 
 namespace Aoe2DEOverlay
 {

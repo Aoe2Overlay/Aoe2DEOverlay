@@ -9,11 +9,11 @@ namespace Aoe2DEOverlay.View
         public SplashView()
         {
             InitializeComponent();
-            UpdateView();
-            StateControl();
+            UpdateVersion();
+            SetupStateControl();
         }
 
-        private void StateControl()
+        private void SetupStateControl()
         {
             CheckForUpdateState();
             CheckUpdateService.Instance.OnNewVersion += (version, url) =>
@@ -29,6 +29,8 @@ namespace Aoe2DEOverlay.View
                 DownloadUpdateState(percentage);
                 if (completed) InstallUpdateState();
             };
+            
+            // TODO disappear splashscreen if every thing is up to date
         }
 
         private void CheckForUpdateState()
@@ -56,7 +58,7 @@ namespace Aoe2DEOverlay.View
             InfoLabel.Content = "Install update!";
         }
 
-        public void UpdateView()
+        public void UpdateVersion()
         {
             VersionLabel.Content = Metadata.Version.ToString();
         }
