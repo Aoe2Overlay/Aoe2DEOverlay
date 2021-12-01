@@ -18,9 +18,6 @@ namespace ReadAoe2Recrod
             ReadReplay(reader);
             ReadMapInfo(reader);
             SkipToEndOfScenario(reader);
-            //ReadInitial(reader);
-            //ReadAchievements(reader);
-            //ReadScenario(reader);
             ReadLobby(reader);
             reader.Close();
         }
