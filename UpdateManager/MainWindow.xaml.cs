@@ -20,7 +20,7 @@ namespace UpdateManager
                 System.Threading.Thread.Sleep(1000);
             }
             CopyUpdate();
-            //StartAoe2Overlay();
+            StartAoe2Overlay();
         }
 
         private void CopyUpdate()
@@ -37,9 +37,7 @@ namespace UpdateManager
 
         private bool IsAoe2OverlayRunning()
         {
-            // TODO check if Aoe2Overlay Application running
-            // TODO make sure only one Instance Application/Window can run (Aoe2DEOverlay & UpdateManager)
-            return false;
+            return Process.GetProcessesByName("Aoe2DEOverlay").Length > 0;
         }
 
         private void StartAoe2Overlay()
