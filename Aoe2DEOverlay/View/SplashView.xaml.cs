@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace Aoe2DEOverlay.View
@@ -23,14 +25,13 @@ namespace Aoe2DEOverlay.View
             CheckUpdateService.Instance.OnNoUpdates += () =>
             {
                 NoUpdateFoundState();
+                DisappearSplashPanel();
             };
             DownloadUpdateService.Instance.OnDownloadProgress += (percentage, completed) =>
             {
                 DownloadUpdateState(percentage);
                 if (completed) InstallUpdateState();
             };
-            
-            // TODO disappear splashscreen if every thing is up to date
         }
 
         private void CheckForUpdateState()
@@ -62,6 +63,11 @@ namespace Aoe2DEOverlay.View
         {
             VersionLabel.Content = Metadata.Version.ToString();
         }
-        
+
+        public async void DisappearSplashPanel()
+        {
+            await Task.Delay(TimeSpan.FromSeconds(1));
+            Panel.Visibility = Visibility.Hidden;
+        }
     }
 }

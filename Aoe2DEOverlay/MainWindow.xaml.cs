@@ -55,10 +55,14 @@ namespace Aoe2DEOverlay
             CheckUpdateService.Instance.OnNewVersion += (version, url) => UpdateAvailable(version);
             var downloadUpdateService = DownloadUpdateService.Instance;
             var installUpdateService = InstallUpdateService.Instance;
-            LoadingState();
-            // TODO: CheckReleaseState if up to date then LoadingState()
             CheckReleases();
-            ApplySettings();
+            RaitingPanel.Visibility = Visibility.Hidden;
+            CheckUpdateService.Instance.OnNoUpdates += () =>
+            {
+                RaitingPanel.Visibility = Visibility.Visible;
+                LoadingState();
+                ApplySettings();
+            };
         }
         protected override void OnSourceInitialized(EventArgs e)
         {
