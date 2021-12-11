@@ -1,7 +1,13 @@
-﻿using System.Threading;
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 
-namespace Aoe2DEOverlay
+namespace UpdateManager
 {
     /// <summary>
     /// Interaction logic for App.xaml
@@ -13,7 +19,8 @@ namespace Aoe2DEOverlay
         {
             bool createdNew;
 
-            _mutex = new Mutex(true, Metadata.AppName, out createdNew);
+            string appName = "Aoe2DEOverlayUpdateManager";
+            _mutex = new Mutex(true, appName, out createdNew);
 
             if (!createdNew)
             {
@@ -22,6 +29,6 @@ namespace Aoe2DEOverlay
             }
 
             base.OnStartup(e);
-        }          
+        }    
     }
 }

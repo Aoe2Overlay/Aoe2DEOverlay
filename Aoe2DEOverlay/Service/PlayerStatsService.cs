@@ -4,12 +4,12 @@ using Newtonsoft.Json.Linq;
 
 namespace Aoe2DEOverlay
 {
-    public delegate void PlayerStatsUpdate(Match match);
+    public delegate void OnPlayerUpdate(Match match);
     public class PlayerStatsService
     {
         public static PlayerStatsService Instance { get; } = new ();
 
-        public PlayerStatsUpdate Subscriber;
+        public OnPlayerUpdate OnPlayerUpdate;
         
         private string baseUrl = "https://aoe2.net/api/";
         
@@ -19,20 +19,17 @@ namespace Aoe2DEOverlay
 
         private PlayerStatsService()
         {
-            MessageBus.Instance.Subscriber += message =>
+            WatchRecordService.Instance.OnMatchUpdate += match =>
             {
-                if (message is WatchRecordMessage recordMessage)
+                foreach (var player in match.Players)
                 {
-                    foreach (var player in recordMessage.Match.Players)
-                    {
-                        if(player.IsAi) continue;
-                        UpdatePlayerWithState(player)
-                            .GetAwaiter()
-                            .OnCompleted(() =>
-                            {
-                                Subscriber(recordMessage.Match);
-                            });
-                    }
+                    if(player.IsAi) continue;
+                    UpdatePlayerWithState(player)
+                        .GetAwaiter()
+                        .OnCompleted(() =>
+                        {
+                            OnPlayerUpdate(match);
+                        });
                 }
             };
         }

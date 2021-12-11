@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using System.Windows.Interop;
@@ -7,10 +6,38 @@ using System.Windows.Media;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
+using Timer = System.Timers.Timer;
 
 namespace Aoe2DEOverlay
 {
-    public partial class MainWindow : Window, ISettingObserver, IReleaseObserver
+    /*
+     * TODO STATE
+     * AppState
+     * - check update
+     * - updating
+     * - installing (unpacking) & replace exe
+     * - error
+     * - ready
+     *
+     * if AppState.ready then:
+     * 
+     *     Aoe2NetPlayerState
+     *     - loading
+     *     - error
+     *     - ready
+     * 
+     *     Aoe2NetMatchState
+     *     - loading
+     *     - error
+     *     - ready
+     *
+     *     Aoe2RecordState
+     *     - reading
+     *     - error
+     *     - ready
+     * 
+     */
+    public partial class MainWindow : Window, ISettingObserver
     {
         private Timer updateAvailableTimer;
         public MainWindow()
@@ -21,13 +48,21 @@ namespace Aoe2DEOverlay
             }
             InitializeComponent();
             Setting.Instance.Observer = this;
-            ReleaseUpdateService.Instance.Observer = this;
-            WatchRecordService.Instance.Subscriber += match => UpdateMatch(match);
-            PlayerStatsService.Instance.Subscriber += match =>  UpdateMatch(match);
-            MatchStateService.Instance.Subscriber += match =>  UpdateMatch(match);
-            LoadingState();
+            //ReleaseUpdateService.Instance.Subscriber += version => UpdateAvailable(version);
+            WatchRecordService.Instance.OnMatchUpdate += match => UpdateMatch(match);
+            PlayerStatsService.Instance.OnPlayerUpdate += match =>  UpdateMatch(match);
+            MatchStateService.Instance.OnServerUpdate += match =>  UpdateMatch(match);
+            CheckUpdateService.Instance.OnNewVersion += (version, url) => UpdateAvailable(version);
+            var downloadUpdateService = DownloadUpdateService.Instance;
+            var installUpdateService = InstallUpdateService.Instance;
             CheckReleases();
-            SettingChanged();
+            RaitingPanel.Visibility = Visibility.Hidden;
+            CheckUpdateService.Instance.OnNoUpdates += () =>
+            {
+                RaitingPanel.Visibility = Visibility.Visible;
+                LoadingState();
+                ApplySettings();
+            };
         }
         protected override void OnSourceInitialized(EventArgs e)
         {
@@ -38,7 +73,7 @@ namespace Aoe2DEOverlay
 
         public void CheckReleases()
         {
-            ReleaseUpdateService.Instance.CheckRelease();
+            CheckUpdateService.Instance.CheckRelease();
         }
         
         public void LoadingState()
@@ -197,6 +232,10 @@ namespace Aoe2DEOverlay
                 return;
             }
 
+            ApplySettings();
+        }
+        public void ApplySettings()
+        {
             RaitingPanel.Margin = new Thickness(Setting.Instance.Raiting.MarginLeft, Setting.Instance.Raiting.MarginTop, Setting.Instance.Raiting.MarginRight, Setting.Instance.Raiting.MarginBottom);
             RaitingPanel.HorizontalAlignment = Setting.Instance.Raiting.Horizontal;
             RaitingPanel.VerticalAlignment = Setting.Instance.Raiting.Vertical;

@@ -7,13 +7,13 @@ using Newtonsoft.Json.Linq;
 
 namespace Aoe2DEOverlay
 {
-    public delegate void MatchStateUpdate(Match match);
+    public delegate void OnServerUpdate(Match match);
 
     public class MatchStateService
     {
         public static MatchStateService Instance { get; } = new ();
 
-        public MatchStateUpdate Subscriber;
+        public OnServerUpdate OnServerUpdate;
 
         private string baseUrl = "https://aoe2.net/api/";
         
@@ -23,13 +23,9 @@ namespace Aoe2DEOverlay
 
         private MatchStateService()
         {
-            MessageBus.Instance.Subscriber += message =>
+            WatchRecordService.Instance.OnMatchUpdate += match =>
             {
-                if (message is WatchRecordMessage recordMessage)
-                {
-                    var match = recordMessage.Match;
-                    UpdateMatchWithState(match);
-                }
+                UpdateMatchWithState(match);
             };
         }
 
@@ -50,7 +46,7 @@ namespace Aoe2DEOverlay
             }
             if (isValid)
             {
-                Subscriber(match);
+                OnServerUpdate(match);
             }
             else
             {

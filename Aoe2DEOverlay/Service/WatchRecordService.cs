@@ -7,7 +7,7 @@ using ReadAoe2Recrod;
 
 namespace Aoe2DEOverlay
 {
-    public delegate void WatchRecordUpdate(Match match);
+    public delegate void OnMatchUpdate(Match match);
     public class WatchRecordService
     {
         private string homePath = Environment.GetEnvironmentVariable("HOMEPATH");
@@ -17,16 +17,16 @@ namespace Aoe2DEOverlay
 
         private FileSystemWatcher watcher = new();
 
-        public WatchRecordUpdate Subscriber;
+        public OnMatchUpdate OnMatchUpdate;
         
         public static WatchRecordService Instance { get; } = new ();
 
         WatchRecordService()
         {
-            StartSaveGameWatching();
+            Start();
         }
 
-        public void StartSaveGameWatching()
+        private void Start()
         {
             basePath = $"{homePath}\\Games\\Age of Empires 2 DE\\76561197961425297\\savegame";
             watcher.Path = basePath;
@@ -54,13 +54,13 @@ namespace Aoe2DEOverlay
             timer.Start();
         }
         
-        public void OnFileChanged(object source, FileSystemEventArgs e)  
+        private void OnFileChanged(object source, FileSystemEventArgs e)  
         {  
             var file = new FileInfo(e.FullPath).FullName;
             OnChanged(file);
         } 
         
-        public void OnChanged(string file)  
+        private void OnChanged(string file)  
         {  
             if (file == lastFile) return; // ignore
             lastFile = file;
@@ -68,9 +68,9 @@ namespace Aoe2DEOverlay
             {
                 var record = Read(file);
                 var match = MatchFromRecord(record);
-                Subscriber(match);
-                var message = new WatchRecordMessage(match);
-                MessageBus.Instance.Subscriber(message);
+                this.OnMatchUpdate(match);
+                //var message = new WatchRecordMessage(match);
+                //MessageBus.Instance.Subscriber(message);
             }
             catch (Exception)
             {
