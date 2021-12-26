@@ -37,10 +37,6 @@
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
-        <None Remove="splash.png" />
-        <Content Include="splash.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
     </ItemGroup>
     <ItemGroup Condition="'$(RuntimeIdentifier)' == 'win-x86'">
         <None Remove="UpdateManager\x86\UpdateManager.exe" />
