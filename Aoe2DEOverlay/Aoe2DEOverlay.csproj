@@ -50,28 +50,6 @@
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
-    <ItemGroup Condition="'$(BuildType)' != 'publish'">
-        <None Remove="UpdateManager\x64\UpdateManager.exe" />
-        <Content Include="UpdateManager\x64\UpdateManager.exe">
-            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <None Remove="UpdateManager\x64\UpdateManager.pdb" />
-        <Content Include="UpdateManager\x64\UpdateManager.pdb">
-            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <None Remove="UpdateManager\x86\UpdateManager.exe" />
-        <Content Include="UpdateManager\x86\UpdateManager.exe">
-            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <None Remove="UpdateManager\x86\UpdateManager.pdb" />
-        <Content Include="UpdateManager\x86\UpdateManager.pdb">
-            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-    </ItemGroup>
     <ItemGroup>
       <None Remove="splash.png" />
       <Resource Include="splash.png">
