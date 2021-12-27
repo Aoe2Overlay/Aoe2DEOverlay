@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:view="clr-namespace:Aoe2DEOverlay.View"
         xmlns:local="clr-namespace:Aoe2DEOverlay"
         mc:Ignorable="d"
         Title="Aoe2DEOverlay"
@@ -47,5 +48,6 @@
                 </StackPanel>
             </Border>
         </StackPanel>
+        <view:SplashView></view:SplashView>
     </Grid>
 </Window>
