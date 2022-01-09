@@ -45,12 +45,13 @@ namespace Aoe2DEOverlay
                 watcher.Filter = filter;  
                 watcher.EnableRaisingEvents = true; 
                 watchers.Add(watcher);
+                    
             
                 var file =  new DirectoryInfo(saveGamePath)
                     .GetFiles()
                     .OrderByDescending(f => f.LastWriteTime)
-                    .First().FullName;
-                
+                    .FirstOrDefault()?.FullName;
+                if(file == null) return;
                 var t1970 = new DateTime(1970, 1, 1);
                 var before = (uint)File.GetLastWriteTime(file).Subtract(t1970).TotalSeconds;
                 var timer = new Timer(5000);
