@@ -13,6 +13,7 @@ namespace Aoe2DEOverlay
         public string ServerName;
         public string GameTypeName; // Random Map, Empire Wars, Unranked
         public string GameTypeShort; // RM, EW, UR
+        public int MapType;
         public string MapName;
         public List<Player> Players = new (8);
     }

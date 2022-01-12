@@ -98,6 +98,7 @@ namespace Aoe2DEOverlay
             match.Difficulty = record.Difficulty;
             match.IsMultiplayer = record.IsMultiplayer;
             match.IsRanked = record.IsRanked;
+            match.MapType = record.MapType;
             match.MapName = record.MapName;
             match.GameTypeName = record.GameTypeName;
             match.GameTypeShort = record.GameTypeShort;
