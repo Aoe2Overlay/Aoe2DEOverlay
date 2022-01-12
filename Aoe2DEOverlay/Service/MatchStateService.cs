@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Documents;
+using Microsoft.AppCenter.Analytics;
 using Microsoft.VisualBasic;
 using Newtonsoft.Json.Linq;
 
@@ -76,6 +78,17 @@ namespace Aoe2DEOverlay
         {
             if(!ValidateMatch(match, json)) return false;
             match.ServerName = json["server"].Value<string>();
+            if (match.MapName == "Unknown")
+            {
+                match.MapName = json["location"].Value<string>();
+                if (Metadata.HasSecret)
+                {
+                    Analytics.TrackEvent("Unknown Map Name", new Dictionary<string, string> {
+                        { "Map Name", match.MapName },
+                        { "Map Type", match.MapType.ToString() }
+                    });
+                }
+            }
             return true;
         }
 
@@ -103,7 +116,7 @@ namespace Aoe2DEOverlay
         private bool ValidateMatch(Match match, uint started, int p1Id, int p2Id, int p3Id, int p4Id, int p5Id, int p6Id, int p7Id, int p8Id)
         {
             var result = Math.Abs(match.Started - started);
-            if (result > 10) return false;
+            if (result > 30) return false;
             foreach (var player in match.Players)
             {
                 if (player.Slot == 1 && player.Id != p1Id) return false;

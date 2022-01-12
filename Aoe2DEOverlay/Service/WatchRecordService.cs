@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -11,11 +12,10 @@ namespace Aoe2DEOverlay
     public class WatchRecordService
     {
         private string homePath = Environment.GetEnvironmentVariable("HOMEPATH");
-        private string basePath;
         private string filter = "*.aoe2record";
         private string lastFile = "";
 
-        private FileSystemWatcher watcher = new();
+        private List<FileSystemWatcher> watchers = new();
 
         public OnMatchUpdate OnMatchUpdate;
         
@@ -28,30 +28,42 @@ namespace Aoe2DEOverlay
 
         private void Start()
         {
-            basePath = $"{homePath}\\Games\\Age of Empires 2 DE\\76561197961425297\\savegame";
-            watcher.Path = basePath;
-            watcher.NotifyFilter = NotifyFilters.CreationTime |
-                                   NotifyFilters.LastWrite;
-            watcher.Changed += OnFileChanged;
-            watcher.Filter = filter;  
-            watcher.EnableRaisingEvents = true; 
+            var basePath = $"{homePath}\\Games\\Age of Empires 2 DE";
+            var saveGamePaths = new DirectoryInfo(basePath)
+                .GetDirectories()
+                .Where( dir => dir.GetDirectories().Where(subDir => subDir.Name == "savegame").Count() > 0)
+                .Select( dir => $"{dir.FullName}\\savegame")
+                .ToList();
             
-            var file =  new DirectoryInfo(basePath)
-                .GetFiles()
-                .OrderByDescending(f => f.LastWriteTime)
-                .First().FullName;
-            
-            var t1970 = new DateTime(1970, 1, 1);
-            var before = (uint)File.GetLastWriteTime(file).Subtract(t1970).TotalSeconds;
-            var timer = new Timer(5000);
-            timer.AutoReset = false;
-            timer.Elapsed += (sender, args) =>
+            saveGamePaths.ForEach(saveGamePath =>
             {
-                var after = (uint)File.GetLastWriteTime(file).Subtract(t1970).TotalSeconds;
-                //if(before < after) OnChanged(file);
-                OnChanged(file); // always show latest
-            };
-            timer.Start();
+                var watcher = new FileSystemWatcher();
+                watcher.Path = saveGamePath;
+                watcher.NotifyFilter = NotifyFilters.CreationTime |
+                                       NotifyFilters.LastWrite;
+                watcher.Changed += OnFileChanged;
+                watcher.Filter = filter;  
+                watcher.EnableRaisingEvents = true; 
+                watchers.Add(watcher);
+                    
+            
+                var file =  new DirectoryInfo(saveGamePath)
+                    .GetFiles()
+                    .OrderByDescending(f => f.LastWriteTime)
+                    .FirstOrDefault()?.FullName;
+                if(file == null) return;
+                var t1970 = new DateTime(1970, 1, 1);
+                var before = (uint)File.GetLastWriteTime(file).Subtract(t1970).TotalSeconds;
+                var timer = new Timer(5000);
+                timer.AutoReset = false;
+                timer.Elapsed += (sender, args) =>
+                {
+                    var after = (uint)File.GetLastWriteTime(file).Subtract(t1970).TotalSeconds;
+                    //if(before < after) OnChanged(file);
+                    OnChanged(file); // always show latest
+                };
+                timer.Start();
+            });
         }
         
         private void OnFileChanged(object source, FileSystemEventArgs e)  
@@ -68,7 +80,7 @@ namespace Aoe2DEOverlay
             {
                 var record = Read(file);
                 var match = MatchFromRecord(record);
-                this.OnMatchUpdate(match);
+                OnMatchUpdate(match);
                 //var message = new WatchRecordMessage(match);
                 //MessageBus.Instance.Subscriber(message);
             }
@@ -86,6 +98,7 @@ namespace Aoe2DEOverlay
             match.Difficulty = record.Difficulty;
             match.IsMultiplayer = record.IsMultiplayer;
             match.IsRanked = record.IsRanked;
+            match.MapType = record.MapType;
             match.MapName = record.MapName;
             match.GameTypeName = record.GameTypeName;
             match.GameTypeShort = record.GameTypeShort;

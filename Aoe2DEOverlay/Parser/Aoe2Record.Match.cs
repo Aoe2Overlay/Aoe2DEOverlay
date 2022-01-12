@@ -8,6 +8,7 @@ namespace ReadAoe2Recrod
     {
         public string Difficulty;
         public string MapName;
+        public int MapType;
         public bool IsMultiplayer;
         public bool IsRanked;
         
@@ -20,6 +21,7 @@ namespace ReadAoe2Recrod
             Difficulty = ParseDefficulty(difficultyId);
             var selectedMapId = reader.ReadUInt32();
             var resolvedMapId = reader.ReadUInt32();
+            MapType = (int) resolvedMapId;
             MapName = ParseMapName(resolvedMapId);
             var revealMap = BoolUInt32(reader);
             var victoryTypeId = reader.ReadUInt32();
@@ -270,6 +272,7 @@ namespace ReadAoe2Recrod
             if(id == 154) return "Michi";
             if(id == 155) return "Team Moats";
             if(id == 156) return "Volcanic Islan";
+            if (id == 167) return "Runestones";
             return "Unknown";
         }
     }
