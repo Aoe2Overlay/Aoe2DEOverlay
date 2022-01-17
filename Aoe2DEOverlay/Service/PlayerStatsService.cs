@@ -85,7 +85,7 @@ namespace Aoe2DEOverlay
                 if(json == null) return;
                 jsonArray = json.Values<JObject>().ToArray();
                 jsonObject = jsonArray.Length > 0 ? jsonArray.First() : null;
-                if (jsonObject != null) return;
+                if (jsonObject == null) return;
                 MapHistoryToRaiting(jsonObject, raiting);
             }
         }

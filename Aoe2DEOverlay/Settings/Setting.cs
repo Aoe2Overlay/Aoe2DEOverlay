@@ -5,7 +5,8 @@ using Newtonsoft.Json.Linq;
 
 namespace Aoe2DEOverlay
 {
-    class Setting
+    public delegate void OnSettingChange(Setting setting);
+    public class Setting
     {
         private static string serverKey = "server";
         private static string raitingKey = "raiting";
@@ -24,8 +25,8 @@ namespace Aoe2DEOverlay
         public ServerSetting Server;
         public RaitingSetting Raiting;
         public UpdateSetting Update;
-        
-        public ISettingObserver Observer;
+
+        public OnSettingChange OnSettingChange;
         
         public int ProfileId { get {
             var token = json[profileIdKey];
@@ -98,7 +99,7 @@ namespace Aoe2DEOverlay
         public void OnChanged(object source, FileSystemEventArgs e)  
         {  
             Load();
-            Observer?.SettingChanged();
+            OnSettingChange(this);
         }  
         
 

@@ -4,7 +4,7 @@ namespace Aoe2DEOverlay
 {
     public class Raiting
     {
-        public int Elo = 1000;
+        public int Elo = 0;
         public int Rank = 0;
         public int Streak = 0;
         public int Games = 0;
