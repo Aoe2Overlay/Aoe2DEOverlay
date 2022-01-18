@@ -3,7 +3,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Aoe2DEOverlay
 {
-    class ServerSetting
+    public class ServerSetting
     {
         private JObject json;
         
