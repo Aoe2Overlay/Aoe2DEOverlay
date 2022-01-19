@@ -12,8 +12,6 @@ namespace Aoe2DEOverlay
         private static string raitingKey = "raiting";
         private static string updateKey = "update";
         
-        private static string profileIdKey = "profileId";
-        
         private JObject json = new JObject();
         
         private string basePath = "";
@@ -26,13 +24,8 @@ namespace Aoe2DEOverlay
         public RaitingSetting Raiting;
         public UpdateSetting Update;
 
-        public OnSettingChange OnSettingChange;
+        public OnSettingChange OnSettingChange; 
         
-        public int ProfileId { get {
-            var token = json[profileIdKey];
-            if (token?.Value<string>() == null) return -1;
-            return token.Value<int>();
-        } }
         public static Setting Instance { get; } = new Setting();
 
         static Setting()
@@ -49,7 +42,6 @@ namespace Aoe2DEOverlay
             Server = new ServerSetting(serverJson);
             Update = new UpdateSetting(updateJson);
             
-            json[profileIdKey] = null;
             json[raitingKey] = raitingJson;
             json[serverKey] = serverJson;
             json[updateKey] = updateJson;

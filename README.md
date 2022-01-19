@@ -12,15 +12,9 @@ Age of Empires 2 Definitive Edition Overlay
 
 ## Install Overlay
 
-For an easy installation the latest version can be downloaded from github [releases](https://github.com/kickass-panda/Aoe2DEOverlay/releases). There is a x64 (64-bit CPU) or x86 (32-bit CPU) version. Unzip the file and copy the folder to a desired location. 
-
-## Setup ProfileId
-
-First we need the ProfileId from [aoe2.net](https://aoe2.net/). On the website under Leaderboards you find the choice between `Random Map`, `Team Random Map`, `Empires Wars`, `Team Empires Wars` and `Unranked`. Select one of the game modes in which you have played at least 10 games. After that you can search for your name with the search input field. Then click on your name and a dialog will open. In the dialog click on profiles to get to the profiles page. In the address bar you will find the ProfileId. Copy it and paste it in the setting.json as value (replace null) for `profileId`. You can open the setting.json file with the windows editor.
-
-Example:
-
-    profileId: 123
+For an easy installation the latest version can be downloaded from github [releases](https://github.com/kickass-panda/Aoe2DEOverlay/releases).
+There is a x64 (64-bit CPU) or x86 (32-bit CPU) version.
+Unzip the file and copy the folder to a desired location (no installation needed).
 
 ## Start
 

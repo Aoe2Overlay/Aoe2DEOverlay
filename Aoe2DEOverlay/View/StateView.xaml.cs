@@ -55,7 +55,7 @@ namespace Aoe2DEOverlay.View
         public void UpdateLabels(Match match)
         {
             ClearStack();
-            var format =  match.Players.Count <= 2 ? Setting.Instance.Raiting.Formats1v1 : Setting.Instance.Raiting.FormatsTeam;
+            var format =  match.Players.Count <= 2 ? Setting.Instance.Raiting.Format1v1 : Setting.Instance.Raiting.FormatTeam;
             format.ToList().ForEach(subformat =>
             {
                 var leftColumn = CreateColumn();

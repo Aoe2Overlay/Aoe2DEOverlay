@@ -4,6 +4,9 @@ namespace Aoe2DEOverlay
 {
     public class Match
     {
+        public ulong? SteamId = null;
+        public uint? ProfileId = null;
+        
         public uint Started;
         public bool HasAI = false;
         public string Difficulty;

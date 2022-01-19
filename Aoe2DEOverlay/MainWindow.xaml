@@ -29,6 +29,6 @@
                 </StackPanel>
             </Border>
         </StackPanel>
-        <view:SplashView></view:SplashView>
+        <view:SplashView x:Name="SplashView"></view:SplashView>
     </Grid>
 </Window>

@@ -34,14 +34,16 @@ namespace Aoe2DEOverlay
         private void UpdateMatchWithState(Match match, int count = 0)
         {
             if (!match.IsMultiplayer) return;
-            var profileId = Setting.Instance.ProfileId;
-            var isValid = profileId > 0;
+            uint profileId = 0;
+            var steamId = match.SteamId ?? 0;
+            var isValid = steamId > 0;
             if (isValid)
             {
-                var json = FetchLastmatchApi(profileId).GetAwaiter().GetResult();
+                var json = FetchLastmatchApi(IdType.Steam, steamId).GetAwaiter().GetResult();
+                match.ProfileId = profileId = ParseProfileId(json);
                 isValid = UpdateMatchWithApiJson(match, json);
             }
-            if (isValid)
+            if (isValid && profileId > 0)
             {
                 var json = FetchLastMatchWeb(profileId).GetAwaiter().GetResult();
                 isValid = UpdateMatchWithWebJson(match, json);
@@ -65,6 +67,11 @@ namespace Aoe2DEOverlay
                     timer.Start();
                 }
             }
+        }
+
+        private uint ParseProfileId(JToken json)
+        {
+            return json["profile_id"].Value<uint>();
         }
 
         private bool UpdateMatchWithApiJson(Match match, JToken json)
@@ -130,14 +137,21 @@ namespace Aoe2DEOverlay
             }
             return true;
         }
-        
-        private async Task<JToken> FetchLastmatchApi(int profileId)
+
+        enum IdType
         {
-            var url = $"{baseUrl}player/lastmatch?game=aoe2de&profile_id={profileId}";
+            Profile,
+            Steam
+        }
+
+        private async Task<JToken> FetchLastmatchApi(IdType type, ulong id)
+        {
+            var param = type == IdType.Profile ?  "profile_id" : "steam_id";
+            var url = $"{baseUrl}player/lastmatch?game=aoe2de&{param}={id}";
             return await Http.FetchJSON(url);
         }
 
-        private async Task<JToken> FetchLastMatchWeb(int profileId)
+        private async Task<JToken> FetchLastMatchWeb(ulong profileId)
         {
             var url = $"https://aoe2.net/matches/aoe2de/{profileId}?count=1";
             var json =  await Http.FetchJSON(url);
