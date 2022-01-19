@@ -1,9 +1,11 @@
-﻿using System;
+// HOW to use:
+// #load "util/version.csx"
+// https://stackoverflow.com/questions/38648005/how-can-i-call-function-from-one-csx-file-to-another-csx-file-in-azure
+
+using System;
 using System.Text.RegularExpressions;
 
-namespace Aoe2DEOverlay
-{
-    public class Version
+public class Version
     {
         public int Major = 0;
         public int Minor = 0;
@@ -37,10 +39,10 @@ namespace Aoe2DEOverlay
         }
         public Version(string version)
         {
-            if (!IsValid(version)) return;
-            var splited = version.Split("-");
+            if (!Version.IsValid(version)) return;
+            var splited = version.Split('-');
 
-            var versionNumber = splited[0].Split(".");
+            var versionNumber = splited[0].Split('.');
             Major = Int32.Parse(versionNumber[0]);
             Minor = Int32.Parse(versionNumber[1]);
             Patch = Int32.Parse(versionNumber[2]);
@@ -49,7 +51,7 @@ namespace Aoe2DEOverlay
             StageLabel = Stage.Release;
             if (splited.Length > 1)
             {
-                var versionStage = splited[1].Split(".");
+                var versionStage = splited[1].Split('.');
                 if (versionStage[0] == "alpha") StageLabel = Stage.Alpha;
                 if (versionStage[0] == "beta") StageLabel = Stage.Beta;
                 if (versionStage[0] == "rc") StageLabel = Stage.ReleaseCandidate;
@@ -142,4 +144,3 @@ namespace Aoe2DEOverlay
             return version;
         }
     }
-}
