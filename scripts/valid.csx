@@ -40,8 +40,8 @@ validGitProcess.Start();
 validGitProcess.WaitForExit();
 var validGitOutput = validGitProcess.StandardOutput.ReadToEnd();
 
-isValid = isValid && validGitOutput.Contains("git branch main: true");
-isValid = isValid && validGitOutput.Contains("git status ok: true");
+isValid = isValid && validGitOutput.Contains("git branch main: True");
+isValid = isValid && validGitOutput.Contains("git status ok: True");
 
 Console.WriteLine(isValid ? "Is Valid" : "Is not Valid");
 if(!isValid) {

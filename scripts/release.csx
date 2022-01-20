@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Text.RegularExpressions;
 
 string GetCurrentScriptPath([System.Runtime.CompilerServices.CallerFilePath] string fileName = null)
 {
