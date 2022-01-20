@@ -68,6 +68,24 @@ buildProcess.WaitForExit();
 
 
 // * * * * * * * * * * * * * * * * * *
+// coldstart.csx
+// * * * * * * * * * * * * * * * * * *
+
+Console.WriteLine("coldstart.csx");
+var coldstartProcess = new Process
+{
+    StartInfo =
+    {
+        FileName = "dotnet-script",
+        WorkingDirectory = scriptsPath,
+        Arguments = "coldstart.csx"
+    }
+};
+coldstartProcess.Start();
+coldstartProcess.WaitForExit();
+
+
+// * * * * * * * * * * * * * * * * * *
 // pack.csx
 // * * * * * * * * * * * * * * * * * *
 
