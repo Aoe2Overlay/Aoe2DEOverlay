@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Text.RegularExpressions;
 
 string GetCurrentScriptPath([System.Runtime.CompilerServices.CallerFilePath] string fileName = null)
 {
@@ -19,7 +20,7 @@ var base64 = Convert.ToBase64String(System.Text.ASCIIEncoding.UTF8.GetBytes(auth
 uint releaseId = 0;
 
 var name = "";
-var tag = $"v{name}";
+var tag = "";
 
 // find version
 {
@@ -37,6 +38,7 @@ var tag = $"v{name}";
 }
 
 if(name == "") return;
+tag = $"v{name}";
 
 // create release
 {

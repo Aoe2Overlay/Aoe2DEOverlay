@@ -10,6 +10,8 @@ var scriptsPath = String.Join('\\', GetCurrentScriptPath().Split('\\').SkipLast(
 // * * * * * * * * * * * * * * * * * *
 // clean.csx
 // * * * * * * * * * * * * * * * * * *
+
+Console.WriteLine("clean.csx");
 var cleanProcess = new Process
 {
     StartInfo =
@@ -25,6 +27,8 @@ cleanProcess.WaitForExit();
 // * * * * * * * * * * * * * * * * * *
 // valid.csx
 // * * * * * * * * * * * * * * * * * *
+
+Console.WriteLine("valid.csx");
 var validProcess = new Process
 {
     StartInfo =
@@ -40,11 +44,16 @@ validProcess.WaitForExit();
 var validOutput = validProcess.StandardOutput.ReadToEnd();
 
 var isValid = validOutput.Contains("Is Valid");
-if(!isValid) return;
+if(!isValid) {
+    Console.WriteLine("is not Valid - run valid.csx for more information");
+    return;
+}
 
 // * * * * * * * * * * * * * * * * * *
 // build.csx
 // * * * * * * * * * * * * * * * * * *
+
+Console.WriteLine("build.csx");
 var buildProcess = new Process
 {
     StartInfo =
@@ -59,8 +68,28 @@ buildProcess.WaitForExit();
 
 
 // * * * * * * * * * * * * * * * * * *
+// coldstart.csx
+// * * * * * * * * * * * * * * * * * *
+
+Console.WriteLine("coldstart.csx");
+var coldstartProcess = new Process
+{
+    StartInfo =
+    {
+        FileName = "dotnet-script",
+        WorkingDirectory = scriptsPath,
+        Arguments = "coldstart.csx"
+    }
+};
+coldstartProcess.Start();
+coldstartProcess.WaitForExit();
+
+
+// * * * * * * * * * * * * * * * * * *
 // pack.csx
 // * * * * * * * * * * * * * * * * * *
+
+Console.WriteLine("pack.csx");
 
 var packProcess = new Process
 {
@@ -77,6 +106,7 @@ packProcess.WaitForExit();
 // * * * * * * * * * * * * * * * * * *
 // release.csx
 // * * * * * * * * * * * * * * * * * *
+Console.WriteLine("release.csx");
 var releaseProcess = new Process
 {
     StartInfo =

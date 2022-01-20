@@ -5,6 +5,6 @@ string GetCurrentScriptPath([System.Runtime.CompilerServices.CallerFilePath] str
 
 var rootPath = String.Join('\\', GetCurrentScriptPath().Split('\\').SkipLast(2));
 
-var publicPath = $"{rootPath}\\publish\\Aoe2DEOverlay";
+var publicPath = $"{rootPath}\\publish";
 
 if(Directory.Exists(publicPath)) Directory.Delete(publicPath, true);
