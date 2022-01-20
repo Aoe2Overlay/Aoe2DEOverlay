@@ -48,42 +48,46 @@ namespace Aoe2DEOverlay
 
         private async Task UpdatePlayerWithRM1v1State(Player player)
         {
-            var json = await FetchLeaderboard(player.Id, 3);
-            if(json == null) return;
-            var jsonArray = json["leaderboard"].Values<JObject>().ToArray();
-            var jsonObject = jsonArray.Length > 0 ? jsonArray.First() : null;
-            player.Country = jsonObject["country"].Value<string>() ?? "";
-            MapToRaiting(jsonObject, player.RM1v1);
+            await UpdatePlayerWithEWTeamState(player, 3, player.RM1v1);
         }
 
         private async Task UpdatePlayerWithRMTeamState(Player player)
         {
-            var json = await FetchLeaderboard(player.Id, 4);
-            if(json == null) return;
-            var jsonArray = json["leaderboard"].Values<JObject>().ToArray();
-            var jsonObject = jsonArray.Length > 0 ? jsonArray.First() : null;
-            player.Country = jsonObject["country"].Value<string>() ?? "";
-            MapToRaiting(jsonObject, player.RMTeam);
+            await UpdatePlayerWithEWTeamState(player, 4, player.RMTeam);
         }
 
         private async Task UpdatePlayerWithEW1v1State(Player player)
         {
-            var json = await FetchLeaderboard(player.Id, 13);
-            if(json == null) return;
-            var jsonArray = json["leaderboard"].Values<JObject>().ToArray();
-            var jsonObject = jsonArray.Length > 0 ? jsonArray.First() : null;
-            player.Country = jsonObject["country"].Value<string>() ?? "";
-            MapToRaiting(jsonObject, player.EW1v1);
+            await UpdatePlayerWithEWTeamState(player, 13, player.EW1v1);
         }
 
         private async Task UpdatePlayerWithEWTeamState(Player player)
         {
-            var json = await FetchLeaderboard(player.Id, 14);
+            await UpdatePlayerWithEWTeamState(player, 14, player.EWTeam);
+        }
+
+        private async Task UpdatePlayerWithEWTeamState(Player player, int leaderboardId, Raiting raiting)
+        {
+            var json = await FetchLeaderboard(player.Id, leaderboardId);
             if(json == null) return;
             var jsonArray = json["leaderboard"].Values<JObject>().ToArray();
             var jsonObject = jsonArray.Length > 0 ? jsonArray.First() : null;
-            player.Country = jsonObject["country"].Value<string>() ?? "";
-            MapToRaiting(jsonObject, player.EWTeam);
+            if (jsonObject != null)
+            {
+                raiting.IsActive = true;
+                player.Country = jsonObject["country"].Value<string>() ?? "";
+                MapToRaiting(jsonObject, raiting);
+            }
+            else
+            {
+                raiting.IsActive = false;
+                json = await FetchRatinghistory(player.Id, leaderboardId);
+                if(json == null) return;
+                jsonArray = json.Values<JObject>().ToArray();
+                jsonObject = jsonArray.Length > 0 ? jsonArray.First() : null;
+                if (jsonObject == null) return;
+                MapHistoryToRaiting(jsonObject, raiting);
+            }
         }
 
         private void MapToRaiting(JToken json, Raiting raiting)
@@ -94,6 +98,16 @@ namespace Aoe2DEOverlay
             raiting.Wins = json["wins"].Value<int>();
             raiting.Losses = json["losses"].Value<int>();
             raiting.LastMatchTime = json["last_match_time"].Value<int>();
+            raiting.Streak = json["streak"].Value<int>();
+        }
+
+        private void MapHistoryToRaiting(JToken json, Raiting raiting)
+        {
+            raiting.Elo = json["rating"].Value<int>();
+            raiting.Wins = json["num_wins"].Value<int>();
+            raiting.Losses = json["num_losses"].Value<int>();
+            raiting.Games = raiting.Wins + raiting.Losses;
+            raiting.LastMatchTime = json["timestamp"].Value<int>();
             raiting.Streak = json["streak"].Value<int>();
         }
         

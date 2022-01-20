@@ -1,10 +1,11 @@
-﻿using System.Windows;
+﻿using System.Linq;
+using System.Windows;
 using System.Windows.Media;
 using Newtonsoft.Json.Linq;
 
 namespace Aoe2DEOverlay
 {
-    class RaitingSetting
+    public class RaitingSetting
     {
         private JObject json;
         
@@ -63,17 +64,21 @@ namespace Aoe2DEOverlay
             if (token?.Value<string>() == null) return fontSizeDefault;
             return token.Value<double>();
         } }
-        
-        public string Format1v1 { get {
+
+        public string[] Format1v1 { get {
             var token = json[format1v1Key];
-            if (token?.Value<string>() == null) return "";
-            return token.Value<string>();
+            var value = new[] {""};
+            if (token?.Type == JTokenType.String) value = new[] {token.Value<string>()};
+            if (token?.Type == JTokenType.Array) value = token.Values<string>().ToArray();
+            return value;
         } }
         
-        public string FormatTeam { get {
+        public string[] FormatTeam { get {
             var token = json[formatTeamKey];
-            if (token?.Value<string>() == null) return "";
-            return token.Value<string>();
+            var value = new[] {""};
+            if (token?.Type == JTokenType.String) value = new[] {token.Value<string>()};
+            if (token?.Type == JTokenType.Array) value = token.Values<string>().ToArray();
+            return value;
         } }
         
         public Color Player1Color { get {

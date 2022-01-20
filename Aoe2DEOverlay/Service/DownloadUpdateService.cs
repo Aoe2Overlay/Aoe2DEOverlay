@@ -9,7 +9,12 @@ namespace Aoe2DEOverlay
     public class DownloadUpdateService
     {
         public static DownloadUpdateService Instance { get; } = new ();
-        
+
+        public static void Initialize()
+        {
+            var _ = Instance;
+        }
+
         private WebClient client = new();
 
         public OnDownloadProgress OnDownloadProgress;

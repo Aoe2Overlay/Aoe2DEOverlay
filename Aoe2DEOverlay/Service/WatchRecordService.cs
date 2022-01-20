@@ -32,6 +32,7 @@ namespace Aoe2DEOverlay
             var saveGamePaths = new DirectoryInfo(basePath)
                 .GetDirectories()
                 .Where( dir => dir.GetDirectories().Where(subDir => subDir.Name == "savegame").Count() > 0)
+                .Where( dir => dir.Name != "0")
                 .Select( dir => $"{dir.FullName}\\savegame")
                 .ToList();
             
@@ -80,9 +81,8 @@ namespace Aoe2DEOverlay
             {
                 var record = Read(file);
                 var match = MatchFromRecord(record);
+                match.SteamId = SteamIdFromPath(file);
                 OnMatchUpdate(match);
-                //var message = new WatchRecordMessage(match);
-                //MessageBus.Instance.Subscriber(message);
             }
             catch (Exception)
             {
@@ -98,6 +98,7 @@ namespace Aoe2DEOverlay
             match.Difficulty = record.Difficulty;
             match.IsMultiplayer = record.IsMultiplayer;
             match.IsRanked = record.IsRanked;
+            match.MapType = record.MapType;
             match.MapName = record.MapName;
             match.GameTypeName = record.GameTypeName;
             match.GameTypeShort = record.GameTypeShort;
@@ -113,6 +114,13 @@ namespace Aoe2DEOverlay
                 match.Players.Add(player);
             }
             return match;
+        }
+
+        private ulong? SteamIdFromPath(string file)
+        {
+            var path = file.Split("\\savegame")[0].Split("\\");
+            var steamId = Convert.ToUInt64(path[^1]);
+            return steamId > 0 ? steamId : null;
         }
         
         public Aoe2Record Read(string path)

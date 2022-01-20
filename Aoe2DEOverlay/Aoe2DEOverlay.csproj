@@ -8,8 +8,8 @@
         <PackageId>Aoe2DEOverlay</PackageId>
         <Title>Aoe2DEOverlay</Title>
         <Authors />
-        <Version>1.0.0-alpha.8</Version>
-        <PackageVersion>1.0.0-alpha.8</PackageVersion>
+        <Version>1.0.0-alpha.9</Version>
+        <PackageVersion>1.0.0-alpha.9</PackageVersion>
         <Nullable>disable</Nullable>
     </PropertyGroup>
     <Target Name="PreBuild" BeforeTargets="PrepareResources">

@@ -8,6 +8,11 @@ namespace Aoe2DEOverlay
     public class InstallUpdateService
     {
         public static InstallUpdateService Instance { get; } = new ();
+
+        public static void Initialize()
+        {
+            var _ = Instance;
+        }
         
         static InstallUpdateService()
         {

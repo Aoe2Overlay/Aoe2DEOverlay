@@ -648,3 +648,4 @@ fabric.properties
 ### Secret
 
 /Aoe2DEOverlay/AppInfo/Secret.cs
+/scripts/github.secret

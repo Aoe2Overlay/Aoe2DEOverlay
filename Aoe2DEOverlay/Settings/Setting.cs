@@ -5,13 +5,12 @@ using Newtonsoft.Json.Linq;
 
 namespace Aoe2DEOverlay
 {
-    class Setting
+    public delegate void OnSettingChange(Setting setting);
+    public class Setting
     {
         private static string serverKey = "server";
         private static string raitingKey = "raiting";
         private static string updateKey = "update";
-        
-        private static string profileIdKey = "profileId";
         
         private JObject json = new JObject();
         
@@ -24,14 +23,9 @@ namespace Aoe2DEOverlay
         public ServerSetting Server;
         public RaitingSetting Raiting;
         public UpdateSetting Update;
+
+        public OnSettingChange OnSettingChange; 
         
-        public ISettingObserver Observer;
-        
-        public int ProfileId { get {
-            var token = json[profileIdKey];
-            if (token?.Value<string>() == null) return -1;
-            return token.Value<int>();
-        } }
         public static Setting Instance { get; } = new Setting();
 
         static Setting()
@@ -48,7 +42,6 @@ namespace Aoe2DEOverlay
             Server = new ServerSetting(serverJson);
             Update = new UpdateSetting(updateJson);
             
-            json[profileIdKey] = null;
             json[raitingKey] = raitingJson;
             json[serverKey] = serverJson;
             json[updateKey] = updateJson;
@@ -98,7 +91,7 @@ namespace Aoe2DEOverlay
         public void OnChanged(object source, FileSystemEventArgs e)  
         {  
             Load();
-            Observer?.SettingChanged();
+            OnSettingChange(this);
         }  
         
 
