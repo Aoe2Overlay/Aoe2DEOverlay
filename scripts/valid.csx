@@ -1,5 +1,3 @@
-// TODO current-version.csx // contains "OK: Local Version is newer"
-
 string GetCurrentScriptPath([System.Runtime.CompilerServices.CallerFilePath] string fileName = null)
 {
     return fileName;
