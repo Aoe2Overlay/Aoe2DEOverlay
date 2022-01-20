@@ -20,7 +20,7 @@ var base64 = Convert.ToBase64String(System.Text.ASCIIEncoding.UTF8.GetBytes(auth
 uint releaseId = 0;
 
 var name = "";
-var tag = $"v{name}";
+var tag = "";
 
 // find version
 {
@@ -38,6 +38,7 @@ var tag = $"v{name}";
 }
 
 if(name == "") return;
+tag = $"v{name}";
 
 // create release
 {
