@@ -32,7 +32,7 @@ namespace Aoe2DEOverlay
         
         public static bool IsValid(string version)
         {
-            Regex regex = new Regex("^(\\d)(\\.\\d)(\\.\\d)(|((\\-alpha|\\-beta|\\-rc)(|\\.\\d)))$");
+            Regex regex = new Regex("^(\\d+)(\\.\\d+)(\\.\\d+)(|((\\-alpha|\\-beta|\\-rc)(|\\.\\d+)))$");
             return regex.Match(version).Success;
         }
         public Version(string version)
