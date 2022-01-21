@@ -12,6 +12,7 @@ namespace Aoe2DEOverlay
     public class WatchRecordService
     {
         private string homePath = Environment.GetEnvironmentVariable("HOMEPATH");
+        private string basePath;
         private string filter = "*.aoe2record";
         private string lastFile = "";
 
@@ -23,19 +24,19 @@ namespace Aoe2DEOverlay
 
         WatchRecordService()
         {
+            basePath = $"{homePath}\\Games\\Age of Empires 2 DE";
             Start();
         }
 
         private void Start()
         {
-            var basePath = $"{homePath}\\Games\\Age of Empires 2 DE";
             var saveGamePaths = new DirectoryInfo(basePath)
                 .GetDirectories()
                 .Where( dir => dir.GetDirectories().Where(subDir => subDir.Name == "savegame").Count() > 0)
                 .Where( dir => dir.Name != "0")
                 .Select( dir => $"{dir.FullName}\\savegame")
                 .ToList();
-            
+            FileInfo? latest = null;
             saveGamePaths.ForEach(saveGamePath =>
             {
                 var watcher = new FileSystemWatcher();
@@ -46,12 +47,19 @@ namespace Aoe2DEOverlay
                 watcher.Filter = filter;  
                 watcher.EnableRaisingEvents = true; 
                 watchers.Add(watcher);
-                    
-            
-                var file =  new DirectoryInfo(saveGamePath)
+
+                var file = new DirectoryInfo(saveGamePath)
                     .GetFiles()
                     .OrderByDescending(f => f.LastWriteTime)
-                    .FirstOrDefault()?.FullName;
+                    .FirstOrDefault();
+
+                if (latest == null) latest = file;
+                if (latest != null && latest.LastWriteTime < file.LastWriteTime) latest = file;
+            });
+
+            if (latest != null)
+            {
+                var file =  latest.FullName;
                 if(file == null) return;
                 var t1970 = new DateTime(1970, 1, 1);
                 var before = (uint)File.GetLastWriteTime(file).Subtract(t1970).TotalSeconds;
@@ -64,7 +72,7 @@ namespace Aoe2DEOverlay
                     OnChanged(file); // always show latest
                 };
                 timer.Start();
-            });
+            }
         }
         
         private void OnFileChanged(object source, FileSystemEventArgs e)  
@@ -82,6 +90,10 @@ namespace Aoe2DEOverlay
                 var record = Read(file);
                 var match = MatchFromRecord(record);
                 match.SteamId = SteamIdFromPath(file);
+                if (match.SteamId == null)
+                {
+                    match.ProfileId = DetectProfileId(file);
+                }
                 OnMatchUpdate(match);
             }
             catch (Exception)
@@ -115,11 +127,72 @@ namespace Aoe2DEOverlay
             }
             return match;
         }
+        
+        private uint? DetectProfileId(string file)
+        {
+            var saveGamePath = string.Join('\\', file.Split('\\').SkipLast(1));
+            var saveGameFiles = new DirectoryInfo(saveGamePath).GetFiles();
+
+            var counters = new Dictionary<uint, uint>(); // <profileId, count>
+            foreach (var saveGameFile in saveGameFiles)
+            {
+                if(counters.Count == 1) break;
+                var record = Read(saveGameFile.FullName);
+                if (!record.IsMultiplayer)
+                {
+                    counters.Clear();
+                    var id = record.Players.ToList().Find(player => !player.IsAi)?.ProfileId ?? 0;
+                    counters[id] = 1;
+                    break;
+                }
+                foreach (var player in record.Players)
+                {
+                    if (player.IsAi) continue;
+                    if (counters.ContainsKey(player.ProfileId))
+                    {
+                        counters[player.ProfileId] += 1;
+                    }
+                    else
+                    {
+                        counters[player.ProfileId] = 1;
+                    }
+                }
+
+                uint maxCount = 0;
+                counters.ToList().ForEach(pair => maxCount = pair.Value > maxCount ? pair.Value : maxCount);
+                foreach (var pair in new Dictionary<uint, uint>(counters) )
+                {
+                    if (pair.Value < maxCount)
+                    {
+                        counters.Remove(pair.Key);
+                    }
+                }
+            }
+
+            uint? profileId = null;
+
+            if (counters.Count == 1)
+            {
+                profileId = counters.First().Key;
+                // TODO: save mapping into settings like:
+                // Setting.Instance.Profiles = {IdFromPath(file): march.ProfileId}
+            }
+
+            return profileId == 0 ? null : profileId;
+        }
+        private ulong? IdFromPath(string file)
+        {
+            var path = file.Split("\\savegame")[0].Split("\\");
+            var id = Convert.ToUInt64(path[^1]);
+            return id > 0 ? id : null;
+        }
 
         private ulong? SteamIdFromPath(string file)
         {
             var path = file.Split("\\savegame")[0].Split("\\");
-            var steamId = Convert.ToUInt64(path[^1]);
+            var steamStr = path[^1];
+            if (steamStr.Length != 17) return null;
+            var steamId = Convert.ToUInt64(steamStr);
             return steamId > 0 ? steamId : null;
         }
         
