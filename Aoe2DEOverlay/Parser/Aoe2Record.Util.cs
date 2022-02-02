@@ -115,7 +115,7 @@ namespace ReadAoe2Recrod
             var match = false;
             while (!match && reader.BaseStream.Position < reader.BaseStream.Length)
             {
-                if (reader.ReadChar() == pattern[i])
+                if (reader.ReadByte() == pattern[i])
                 {
                     i += 1;
                     if (i == pattern.Length)

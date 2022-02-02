@@ -25,7 +25,7 @@ namespace ReadAoe2Recrod
         public void SkipToEndOfScenario(BinaryReader reader)
         {
             // skip to end of game settings at scenario
-            var pattern = new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0x40 };
+            var pattern = new byte[] { 0xCD, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0x04, 0x40 };
            if (!Find(reader, pattern))
             {
                 throw new Exception("ERROR: scenario end not found!");
