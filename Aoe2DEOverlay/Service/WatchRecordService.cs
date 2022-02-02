@@ -41,8 +41,14 @@ namespace Aoe2DEOverlay
             {
                 var watcher = new FileSystemWatcher();
                 watcher.Path = saveGamePath;
-                watcher.NotifyFilter = NotifyFilters.CreationTime |
-                                       NotifyFilters.LastWrite;
+                watcher.NotifyFilter = NotifyFilters.Attributes |  
+                                       NotifyFilters.CreationTime |  
+                                       NotifyFilters.DirectoryName |  
+                                       NotifyFilters.FileName |  
+                                       NotifyFilters.LastAccess |  
+                                       NotifyFilters.LastWrite |  
+                                       NotifyFilters.Security | 
+                                       NotifyFilters.Size;
                 watcher.Changed += OnFileChanged;
                 watcher.Filter = filter;  
                 watcher.EnableRaisingEvents = true; 
