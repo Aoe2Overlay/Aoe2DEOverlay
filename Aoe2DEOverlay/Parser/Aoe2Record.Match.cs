@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -60,23 +61,28 @@ namespace ReadAoe2Recrod
 
         private void ReadMatchPart2(BinaryReader reader)
         {
+            Padding(reader, 9);
             var fogOfWar = reader.ReadBoolean();
             var cheatNotifications = reader.ReadBoolean();
             var coloredChat = reader.ReadBoolean();
-            Padding(reader, 1); // since aoe2 patch november 2021 (Update 56005)
-            Padding(reader, 9);
             Padding(reader, 4); // separator
             IsRanked = reader.ReadBoolean();
-            Padding(reader, 11);
-            Padding(reader, 5);
+            var allowSpecs = reader.ReadBoolean();
+            var lobbyVisibility = reader.ReadUInt32();
+            var hiddenCivs = reader.ReadBoolean();
+            var matchmaking = reader.ReadBoolean();
+            var specDelay = reader.ReadUInt32();
+            var scenarioCiv = reader.ReadByte();
+            var rmsCrc = reader.ReadBytes(4);
             
-            var strings = new string[23];
-            for (int i = 0; i < 23; i++)
+            var length = 23;
+            var strings = new string[length];
+            for (int i = 0; i < length; i++)
             {
                 strings[i] = DEString(reader);
                 while (new uint[] {3, 21, 23, 42, 44, 45, 46, 47}.Contains(reader.ReadUInt32())){}
             }
-            Padding(reader, 59*4); // skip strategic_numbers ArrayInt32(reader, 59)
+
             var num_ai_files = (int)reader.ReadUInt64();
             for (int i = 0; i < num_ai_files; i++)
             {
@@ -84,15 +90,22 @@ namespace ReadAoe2Recrod
                 DEString(reader);
                 Padding(reader, 4);
             }
-            
-            Padding(reader, 24);
-            var lobbyName = DEString(reader);
-            var moddedDataset = DEString(reader);
-            Padding(reader, 23); // since aoe2 patch november 2021 (Update 56005)
-            DEString(reader);
-            Padding(reader, 36); // since aoe2 patch november 2021 (Update 56005)
-            DEString(reader);
             Padding(reader, 8);
+            var guid = reader.ReadBytes(16);
+            var lobbyName = DEString(reader);
+            Padding(reader, 8);
+            var moddedDataset = DEString(reader);
+            Padding(reader, 19);
+            Padding(reader, 5);
+            Padding(reader, 9);
+            Padding(reader, 1);
+            Padding(reader, 8);
+            Padding(reader, 21);
+            Padding(reader, 4);
+            DEString(reader);
+            Padding(reader, 5);
+            Padding(reader, 1);
+            Padding(reader, 2);
         }
 
         public string ParseDefficulty(uint id)

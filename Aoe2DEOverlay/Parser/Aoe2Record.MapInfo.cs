@@ -20,15 +20,6 @@ namespace ReadAoe2Recrod
             }
             var allVisible = reader.ReadBoolean();
             var fogOfWar = reader.ReadBoolean();
-            //  DE 12.97 fix START 
-            /*
-            var peekStart = reader.BaseStream.Position;
-            Padding(reader, (int)tileNum * 7);
-            var val = reader.ReadUInt32(); 
-            var peekEnd = reader.BaseStream.Position;
-            reader.BaseStream.Seek(peekStart - peekEnd, SeekOrigin.Current);
-            */
-            // DE fix END
             for (int i = 0; i < tileNum; i++)
             {
                 var terrainType = reader.ReadByte();

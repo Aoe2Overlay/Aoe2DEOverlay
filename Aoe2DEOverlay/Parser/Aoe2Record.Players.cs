@@ -13,12 +13,12 @@ namespace ReadAoe2Recrod
             Padding(reader, 8);
             Padding(reader, 4); // separatorosition;
             
+            Padding(reader, 33); // since aoe2 patch January 31 2022 (Update 58259)
+            
             var players = new List<RecordPlayer>(8); 
             for (int i = 0; i < 8; i++)
             {
                 var player = new RecordPlayer();
-
-                Padding(reader, 1); // since aoe2 patch november 2021 (Update 56005)
                 
                 var dlcId  = reader.ReadUInt32();
                 var colorId = reader.ReadInt32();
@@ -40,12 +40,8 @@ namespace ReadAoe2Recrod
                 player.ProfileId = reader.ReadUInt32();
                 Padding(reader, 4);
                 player.Slot = reader.ReadInt32();
-                var hdRmElo  = reader.ReadUInt32();
-                var hdDmElo  = reader.ReadUInt32();
-                var animatedDestructionEnabled  = reader.ReadBoolean();
-                var customAi  = reader.ReadBoolean();
                 
-                Padding(reader, 7); // since aoe2 patch november 2021 (Update 56005)
+                Padding(reader, 10);  // since aoe2 patch January 31 2022 (Update 58259)
                 
                 if(typeId != 1 /* is not closed */ ) players.Add(player);
             }

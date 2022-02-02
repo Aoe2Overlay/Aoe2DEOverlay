@@ -23,6 +23,7 @@ namespace ReadAoe2Recrod
             var treatyLength = reader.ReadByte();
             var cheatCodesUsed = reader.ReadUInt32();
             Padding(reader, 4);
+            Padding(reader, 1);  // since aoe2 patch January 31 2022 (Update 58259)
             var numChat = reader.ReadUInt32();
             for (int i = 0; i < numChat; i++)
             {
