@@ -66,10 +66,10 @@ namespace Aoe2DEOverlay
             if (latest != null)
             {
                 var file =  latest.FullName;
-                if(file == null) return;
+                
                 var t1970 = new DateTime(1970, 1, 1);
                 var before = (uint)File.GetLastWriteTime(file).Subtract(t1970).TotalSeconds;
-                var timer = new Timer(5000);
+                var timer = new Timer(1000);
                 timer.AutoReset = false;
                 timer.Elapsed += (sender, args) =>
                 {
