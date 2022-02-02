@@ -41,13 +41,8 @@ namespace Aoe2DEOverlay
             {
                 var watcher = new FileSystemWatcher();
                 watcher.Path = saveGamePath;
-                watcher.NotifyFilter = NotifyFilters.Attributes |  
-                                       NotifyFilters.CreationTime |  
-                                       NotifyFilters.DirectoryName |  
-                                       NotifyFilters.FileName |  
-                                       NotifyFilters.LastAccess |  
-                                       NotifyFilters.LastWrite |  
-                                       NotifyFilters.Security | 
+                watcher.NotifyFilter = NotifyFilters.CreationTime |  
+                                       NotifyFilters.LastWrite |   
                                        NotifyFilters.Size;
                 watcher.Changed += OnFileChanged;
                 watcher.Filter = filter;  
@@ -89,6 +84,12 @@ namespace Aoe2DEOverlay
         
         private void OnChanged(string file)  
         {  
+            var saveGamePath = string.Join('\\', file.Split('\\').SkipLast(1));
+            file = new DirectoryInfo(saveGamePath)
+                .GetFiles()
+                .OrderByDescending(f => f.LastWriteTime)
+                .FirstOrDefault()?.FullName;
+            
             if (file == lastFile) return; // ignore
             lastFile = file;
             try
