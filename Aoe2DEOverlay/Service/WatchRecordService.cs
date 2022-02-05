@@ -41,13 +41,8 @@ namespace Aoe2DEOverlay
             {
                 var watcher = new FileSystemWatcher();
                 watcher.Path = saveGamePath;
-                watcher.NotifyFilter = NotifyFilters.Attributes |  
-                                       NotifyFilters.CreationTime |  
-                                       NotifyFilters.DirectoryName |  
-                                       NotifyFilters.FileName |  
-                                       NotifyFilters.LastAccess |  
-                                       NotifyFilters.LastWrite |  
-                                       NotifyFilters.Security | 
+                watcher.NotifyFilter = NotifyFilters.CreationTime |  
+                                       NotifyFilters.LastWrite |   
                                        NotifyFilters.Size;
                 watcher.Changed += OnFileChanged;
                 watcher.Filter = filter;  
@@ -66,10 +61,10 @@ namespace Aoe2DEOverlay
             if (latest != null)
             {
                 var file =  latest.FullName;
-                if(file == null) return;
+                
                 var t1970 = new DateTime(1970, 1, 1);
                 var before = (uint)File.GetLastWriteTime(file).Subtract(t1970).TotalSeconds;
-                var timer = new Timer(5000);
+                var timer = new Timer(1000);
                 timer.AutoReset = false;
                 timer.Elapsed += (sender, args) =>
                 {
@@ -89,6 +84,12 @@ namespace Aoe2DEOverlay
         
         private void OnChanged(string file)  
         {  
+            var saveGamePath = string.Join('\\', file.Split('\\').SkipLast(1));
+            file = new DirectoryInfo(saveGamePath)
+                .GetFiles()
+                .OrderByDescending(f => f.LastWriteTime)
+                .FirstOrDefault()?.FullName;
+            
             if (file == lastFile) return; // ignore
             lastFile = file;
             try
