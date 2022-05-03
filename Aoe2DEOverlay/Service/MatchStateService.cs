@@ -42,7 +42,7 @@ namespace Aoe2DEOverlay
 
         private void UpdateMatchWithState(Match match, int count = 0, bool force = false)
         {
-            if (!force && !match.IsMultiplayer) return;
+            if (!match.IsMultiplayer) return;
             uint profileId = 0;
             var steamId = match.SteamId ?? 0;
             var isValid = steamId > 0;
