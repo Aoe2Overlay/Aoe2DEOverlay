@@ -9,6 +9,7 @@ using ReadAoe2Recrod;
 namespace Aoe2DEOverlay
 {
     public delegate void OnMatchUpdate(Match match);
+    public delegate void OnRecordReadError(Match match);
     public class WatchRecordService
     {
         private string homePath = Environment.GetEnvironmentVariable("HOMEPATH");
@@ -19,6 +20,7 @@ namespace Aoe2DEOverlay
         private List<FileSystemWatcher> watchers = new();
 
         public OnMatchUpdate OnMatchUpdate;
+        public OnRecordReadError OnRecordReadError;
         
         public static WatchRecordService Instance { get; } = new ();
 
@@ -106,7 +108,11 @@ namespace Aoe2DEOverlay
             catch (Exception)
             {
                 lastFile = "";
-                // TODO: create OnMatchError delegate to show it in the UI
+                var steamId = SteamIdFromPath(file) ?? 0;
+                var match = new Match();
+                match.SteamId = steamId;
+                match.Started = StartedFromFile(file);
+                OnRecordReadError(match);
             }
         } 
         
@@ -205,9 +211,8 @@ namespace Aoe2DEOverlay
         
         public Aoe2Record Read(string path)
         {
-            var t1970 = new DateTime(1970, 1, 1);
             var record = new Aoe2Record();
-            record.Started =  (uint)File.GetCreationTime(path).ToUniversalTime().Subtract(t1970).TotalSeconds; // +/- 5 seconds diff to aoe2.net
+            record.Started = StartedFromFile(path);
             byte[] fileBytes = ReadAllBytes(path);
             var memory = new MemoryStream(fileBytes);
             var reader = new BinaryReader(memory, Encoding.ASCII);
@@ -225,6 +230,13 @@ namespace Aoe2DEOverlay
                 fs.Read(bytes, 0, length);
             }
             return bytes;
+        }
+
+        private uint StartedFromFile(string path)
+        {
+            var t1970 = new DateTime(1970, 1, 1);
+            // +/- seconds diff to aoe2.net
+            return (uint)File.GetCreationTime(path).ToUniversalTime().Subtract(t1970).TotalSeconds;
         }
     }
 }

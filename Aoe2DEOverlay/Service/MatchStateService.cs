@@ -6,6 +6,7 @@ using System.Windows.Documents;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.VisualBasic;
 using Newtonsoft.Json.Linq;
+using ReadAoe2Recrod;
 
 namespace Aoe2DEOverlay
 {
@@ -16,6 +17,7 @@ namespace Aoe2DEOverlay
         public static MatchStateService Instance { get; } = new ();
 
         public OnServerUpdate OnServerUpdate;
+        public OnMatchUpdate OnMatchUpdate;
 
         private string baseUrl = "https://aoe2.net/api/";
         
@@ -29,11 +31,18 @@ namespace Aoe2DEOverlay
             {
                 UpdateMatchWithState(match);
             };
+            WatchRecordService.Instance.OnRecordReadError += match =>
+            {
+                if (match.SteamId <= 0) return;
+                UpdateMatchWithState(match, 0, true);
+                if (match.Players.Count > 0) match.IsMultiplayer = true;
+                OnMatchUpdate(match);
+            };
         }
 
-        private void UpdateMatchWithState(Match match, int count = 0)
+        private void UpdateMatchWithState(Match match, int count = 0, bool force = false)
         {
-            if (!match.IsMultiplayer) return;
+            if (!force && !match.IsMultiplayer) return;
             uint profileId = 0;
             var steamId = match.SteamId ?? 0;
             var isValid = steamId > 0;
@@ -41,12 +50,12 @@ namespace Aoe2DEOverlay
             {
                 var json = FetchLastmatchApi(IdType.Steam, steamId).GetAwaiter().GetResult();
                 match.ProfileId = profileId = ParseProfileId(json);
-                isValid = UpdateMatchWithApiJson(match, json);
+                isValid = UpdateMatchWithApiJson(match, json, force);
             }
             if (isValid && profileId > 0)
             {
                 var json = FetchLastMatchWeb(profileId).GetAwaiter().GetResult();
-                isValid = UpdateMatchWithWebJson(match, json);
+                isValid = UpdateMatchWithWebJson(match, json, force);
             }
             if (isValid)
             {
@@ -74,16 +83,40 @@ namespace Aoe2DEOverlay
             return json["profile_id"].Value<uint>();
         }
 
-        private bool UpdateMatchWithApiJson(Match match, JToken json)
+        private bool UpdateMatchWithApiJson(Match match, JToken json, bool force = false)
         {
-            if(!ValidateMatch(match, json["last_match"])) return false;
+            if(!ValidateMatch(match, json["last_match"], force)) return false;
             match.ServerKey = json["last_match"]["server"].Value<string>();
+
+            if (force)
+            {
+                match.IsRanked = json["last_match"]["ranked"].Value<bool>();
+                var gameType =  json["last_match"]["game_type"].Value<int>();
+                match.GameTypeName = Aoe2Mapper.ParseGameTypeName(gameType);
+                match.GameTypeShort = Aoe2Mapper.ParseGameTypeShort(gameType);
+                var mapType =  json["last_match"]["map_type"].Value<int>();
+                match.MapType = mapType;
+                match.MapName = Aoe2Mapper.ParseMapName(mapType);
+
+                var jPlayers = json["last_match"]["players"].Values<JToken>();
+                foreach (var jPlayer in jPlayers)
+                {
+                    var player = new Player();
+                    player.Name = jPlayer["name"]?.Value<string>();
+                    player.Civ = Aoe2Mapper.ParseCiv(jPlayer["civ"]?.Value<uint>() ?? 0);
+                    player.Color = jPlayer["color"]?.Value<int>() ?? 0;
+                    player.Slot = jPlayer["slot"]?.Value<int>() ?? 0;
+                    player.Id = jPlayer["profile_id"]?.Value<int>() ?? 0;
+                    match.Players.Add(player);
+                }
+            }
+            
             return true;
         }
 
-        private bool UpdateMatchWithWebJson(Match match, JToken json)
+        private bool UpdateMatchWithWebJson(Match match, JToken json, bool force = false)
         {
-            if(!ValidateMatch(match, json)) return false;
+            if(!ValidateMatch(match, json, force)) return false;
             match.ServerName = json["server"].Value<string>();
             if (match.MapName == "Unknown")
             {
@@ -99,7 +132,7 @@ namespace Aoe2DEOverlay
             return true;
         }
 
-        private bool ValidateMatch(Match match, JToken json)
+        private bool ValidateMatch(Match match, JToken json, bool ignorePlayer = false)
         {
             var playersJson = json["players"].Values<JObject>();
             var started = json["started"].Value<uint>();
@@ -117,13 +150,16 @@ namespace Aoe2DEOverlay
                 pIds[0], pIds[1],
                 pIds[2], pIds[3],
                 pIds[4], pIds[5],
-                pIds[6], pIds[7]);
+                pIds[6], pIds[7], 
+                ignorePlayer);
         }
 
-        private bool ValidateMatch(Match match, uint started, int p1Id, int p2Id, int p3Id, int p4Id, int p5Id, int p6Id, int p7Id, int p8Id)
+        private bool ValidateMatch(Match match, uint started, int p1Id, int p2Id, int p3Id, int p4Id, int p5Id, int p6Id, int p7Id, int p8Id, bool ignorePlayer = false)
         {
-            var result = Math.Abs(match.Started - started);
+            
+            var result = Diff(match.Started, started);
             if (result > 30) return false;
+            if (ignorePlayer) return true;
             foreach (var player in match.Players)
             {
                 if (player.Slot == 1 && player.Id != p1Id) return false;
@@ -136,6 +172,11 @@ namespace Aoe2DEOverlay
                 if (player.Slot == 8 && player.Id != p8Id) return false;
             }
             return true;
+        }
+
+        private uint Diff(uint n1, uint n2)
+        {
+            return n1 < n2 ? n2 - n1 : n1 - n2;
         }
 
         enum IdType
