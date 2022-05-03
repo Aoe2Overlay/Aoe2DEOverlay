@@ -35,7 +35,7 @@ namespace Aoe2DEOverlay
             {
                 if (match.SteamId <= 0) return;
                 UpdateMatchWithState(match, 0, true);
-                if (match.Players.Count > 0) match.IsMultiplayer = true;
+                //if (match.Players.Count > 0) match.IsMultiplayer = true;
                 OnMatchUpdate(match);
             };
         }
@@ -71,7 +71,7 @@ namespace Aoe2DEOverlay
                     timer.Elapsed += (sender, args) =>
                     {
                         timer.Stop();
-                        UpdateMatchWithState(match, count + 1);
+                        UpdateMatchWithState(match, count + 1, force);
                     };
                     timer.Start();
                 }

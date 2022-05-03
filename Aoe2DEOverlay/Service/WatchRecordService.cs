@@ -112,6 +112,7 @@ namespace Aoe2DEOverlay
                 var match = new Match();
                 match.SteamId = steamId;
                 match.Started = StartedFromFile(file);
+                match.IsMultiplayer = IsMultiplayerFromPath(file);
                 OnRecordReadError(match);
             }
         } 
@@ -207,6 +208,12 @@ namespace Aoe2DEOverlay
             if (steamStr.Length != 17) return null;
             var steamId = Convert.ToUInt64(steamStr);
             return steamId > 0 ? steamId : null;
+        }
+
+        private bool IsMultiplayerFromPath(string file)
+        {
+            var name = file.Split("\\savegame")[1];
+            return name.Contains("MP Replay");
         }
         
         public Aoe2Record Read(string path)
