@@ -12,6 +12,7 @@ namespace ReadAoe2Recrod
         {
             Padding(reader, 14);
             var teams = reader.ReadBytes(8);
+            Padding(reader, 5); // >= 26.16
             var revealMapId = reader.ReadUInt32();
             var fogOfWar = BoolUInt32(reader);
             var mapSize = reader.ReadUInt32();
@@ -33,6 +34,7 @@ namespace ReadAoe2Recrod
             }
             var mapSeed = reader.ReadInt32();
             Padding(reader, 10);
+            Padding(reader, 4); // >= 26.16
         }
 
         private string ParseGameTypeName(int id)

@@ -56,6 +56,10 @@ namespace ReadAoe2Recrod
             var turboEnabled = reader.ReadBoolean();
             var sharedExploration = reader.ReadBoolean();
             var teamPositions = reader.ReadBoolean();
+            var subGameMode = reader.ReadUInt32();
+            var battleRoyaleTime = reader.ReadUInt32();
+            var handicap = reader.ReadBoolean();
+            Padding(reader, 4); // separator
         }
 
         private void ReadMatchPart2(BinaryReader reader)
@@ -95,16 +99,17 @@ namespace ReadAoe2Recrod
             Padding(reader, 8);
             var moddedDataset = DEString(reader);
             Padding(reader, 19);
-            Padding(reader, 5);
-            Padding(reader, 9);
-            Padding(reader, 1);
-            Padding(reader, 8);
-            Padding(reader, 21);
-            Padding(reader, 4);
+            Padding(reader, 5);  // >= 13.13
+            Padding(reader, 9);  // >= 13.17
+            Padding(reader, 1);  // >= 20.06
+            Padding(reader, 8);  // >= 20.16
+            Padding(reader, 21); // >= 25.06
+            Padding(reader, 4);  // >= 25.22
+            Padding(reader, 8);  // >= 26.16
             DEString(reader);
             Padding(reader, 5);
-            Padding(reader, 1);
-            Padding(reader, 2);
+            Padding(reader, 1); // >= 13.13
+            Padding(reader, 2); // >= 13.17
         }
 
         public string ParseDefficulty(uint id)

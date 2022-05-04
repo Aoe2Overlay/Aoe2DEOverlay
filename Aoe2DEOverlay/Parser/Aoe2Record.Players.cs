@@ -10,11 +10,6 @@ namespace ReadAoe2Recrod
         
         private void ReadPlayers(BinaryReader reader)
         {
-            Padding(reader, 8);
-            Padding(reader, 4); // separatorosition;
-            
-            Padding(reader, 33); // since aoe2 patch January 31 2022 (Update 58259)
-            
             var players = new List<RecordPlayer>(8); 
             for (int i = 0; i < 8; i++)
             {
