@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Timers;
+using Microsoft.AppCenter.Analytics;
 using ReadAoe2Recrod;
 
 namespace Aoe2DEOverlay
@@ -107,6 +108,12 @@ namespace Aoe2DEOverlay
             }
             catch (Exception)
             {
+                var filename = file?.Split("\\savegame")[1] ?? "";
+                var version = filename.Split("@")[0].Replace("\\SP Replay", "").Replace("\\MP Replay", "");
+                Analytics.TrackEvent("aoe2record read Error", new Dictionary<string, string> {
+                    { "version", version },
+                });
+                
                 lastFile = "";
                 var steamId = SteamIdFromPath(file) ?? 0;
                 var match = new Match();
