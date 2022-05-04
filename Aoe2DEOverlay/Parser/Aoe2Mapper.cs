@@ -185,7 +185,7 @@
             if (id == 17) return "Huns";
             if (id == 18) return "Koreans";
             if (id == 19) return "Italians";
-            if (id == 20) return "Indians";
+            if (id == 20) return "Hindustanis";
             if (id == 21) return "Incas";
             if (id == 22) return "Magyars";
             if (id == 23) return "Slavs";
@@ -205,6 +205,10 @@
             if (id == 37) return "Sicilians";
             if (id == 38) return "Poles";
             if (id == 39) return "Bohemian";
+            if (id == 40) return "Dravidians";
+            if (id == 41) return "Bengalis";
+            if (id == 42) return "Gurjaras";
+            
             return "Unknown";
         }
     }

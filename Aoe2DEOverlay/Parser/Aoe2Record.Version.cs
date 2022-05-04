@@ -16,6 +16,8 @@ namespace ReadAoe2Recrod
             SaveVersion = Math.Round(reader.ReadSingle(), 2);
             IsDE = GameVersion == "VER 9.4" && SaveVersion >= 12.97;
             if(!IsDE) return;
+            var build= reader.ReadUInt32();
+            var timestamp= reader.ReadUInt32();
             Version = reader.ReadSingle();
             var intervalVersion = reader.ReadUInt32();
             var gameOptionsVersion = reader.ReadUInt32();
