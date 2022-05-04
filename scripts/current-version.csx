@@ -71,7 +71,7 @@ else
 // * * * * * * * * * * * * * * * * * * * * * * * * * *
 var http = new HttpClient();
 
-var request = new HttpRequestMessage(HttpMethod.Get, "https://api.github.com/repos/kickass-panda/Aoe2DEOverlay/releases/latest");
+var request = new HttpRequestMessage(HttpMethod.Get, "https://api.github.com/repos/Aoe2Overlay/Aoe2DEOverlay/releases/latest");
 var product = new ProductInfoHeaderValue("ReleaseScript", "1.0");
 request.Headers.UserAgent.Add(product);
 

@@ -44,7 +44,7 @@ tag = $"v{name}";
 {
     var http = new HttpClient();
 
-    var request = new HttpRequestMessage(HttpMethod.Post, "https://api.github.com/repos/kickass-panda/Aoe2DEOverlay/releases");
+    var request = new HttpRequestMessage(HttpMethod.Post, "https://api.github.com/repos/Aoe2Overlay/Aoe2DEOverlay/releases");
     request.Headers.Add("Authorization", "Basic " + base64);
     var product = new ProductInfoHeaderValue("ReleaseScript", "1.0");
     request.Headers.UserAgent.Add(product);
@@ -70,7 +70,7 @@ public static void upload(string path, string file, uint id, string base64)
     
     var data = File.ReadAllBytes($"{path}\\{file}");
 
-    var url = $"https://uploads.github.com/repos/kickass-panda/Aoe2DEOverlay/releases/{id}/assets?name={file}";
+    var url = $"https://uploads.github.com/repos/Aoe2Overlay/Aoe2DEOverlay/releases/{id}/assets?name={file}";
     var request = new HttpRequestMessage(HttpMethod.Post, url);
     request.Headers.Add("Authorization", "Basic " + base64);
     var product = new ProductInfoHeaderValue("ReleaseScript", "1.0");
