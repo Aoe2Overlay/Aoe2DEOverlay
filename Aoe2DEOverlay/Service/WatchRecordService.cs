@@ -4,11 +4,13 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Timers;
+using Microsoft.AppCenter.Analytics;
 using ReadAoe2Recrod;
 
 namespace Aoe2DEOverlay
 {
     public delegate void OnMatchUpdate(Match match);
+    public delegate void OnRecordReadError(Match match);
     public class WatchRecordService
     {
         private string homePath = Environment.GetEnvironmentVariable("HOMEPATH");
@@ -19,6 +21,7 @@ namespace Aoe2DEOverlay
         private List<FileSystemWatcher> watchers = new();
 
         public OnMatchUpdate OnMatchUpdate;
+        public OnRecordReadError OnRecordReadError;
         
         public static WatchRecordService Instance { get; } = new ();
 
@@ -105,8 +108,19 @@ namespace Aoe2DEOverlay
             }
             catch (Exception)
             {
+                var filename = file?.Split("\\savegame")[1] ?? "";
+                var version = filename.Split("@")[0].Replace("\\SP Replay", "").Replace("\\MP Replay", "");
+                Analytics.TrackEvent("aoe2record read Error", new Dictionary<string, string> {
+                    { "version", version },
+                });
+                
                 lastFile = "";
-                // TODO: create OnMatchError delegate to show it in the UI
+                var steamId = SteamIdFromPath(file) ?? 0;
+                var match = new Match();
+                match.SteamId = steamId;
+                match.Started = StartedFromFile(file);
+                match.IsMultiplayer = IsMultiplayerFromPath(file);
+                OnRecordReadError(match);
             }
         } 
         
@@ -144,36 +158,40 @@ namespace Aoe2DEOverlay
             foreach (var saveGameFile in saveGameFiles)
             {
                 if(counters.Count == 1) break;
-                var record = Read(saveGameFile.FullName);
-                if (!record.IsMultiplayer)
+                try
                 {
-                    counters.Clear();
-                    var id = record.Players.ToList().Find(player => !player.IsAi)?.ProfileId ?? 0;
-                    counters[id] = 1;
-                    break;
-                }
-                foreach (var player in record.Players)
-                {
-                    if (player.IsAi) continue;
-                    if (counters.ContainsKey(player.ProfileId))
+                    var record = Read(saveGameFile.FullName);
+                    if (!record.IsMultiplayer)
                     {
-                        counters[player.ProfileId] += 1;
+                        counters.Clear();
+                        var id = record.Players.ToList().Find(player => !player.IsAi)?.ProfileId ?? 0;
+                        counters[id] = 1;
+                        break;
                     }
-                    else
+                    foreach (var player in record.Players)
                     {
-                        counters[player.ProfileId] = 1;
+                        if (player.IsAi) continue;
+                        if (counters.ContainsKey(player.ProfileId))
+                        {
+                            counters[player.ProfileId] += 1;
+                        }
+                        else
+                        {
+                            counters[player.ProfileId] = 1;
+                        }
                     }
-                }
 
-                uint maxCount = 0;
-                counters.ToList().ForEach(pair => maxCount = pair.Value > maxCount ? pair.Value : maxCount);
-                foreach (var pair in new Dictionary<uint, uint>(counters) )
-                {
-                    if (pair.Value < maxCount)
+                    uint maxCount = 0;
+                    counters.ToList().ForEach(pair => maxCount = pair.Value > maxCount ? pair.Value : maxCount);
+                    foreach (var pair in new Dictionary<uint, uint>(counters) )
                     {
-                        counters.Remove(pair.Key);
+                        if (pair.Value < maxCount)
+                        {
+                            counters.Remove(pair.Key);
+                        }
                     }
                 }
+                catch{continue;}
             }
 
             uint? profileId = null;
@@ -202,12 +220,17 @@ namespace Aoe2DEOverlay
             var steamId = Convert.ToUInt64(steamStr);
             return steamId > 0 ? steamId : null;
         }
+
+        private bool IsMultiplayerFromPath(string file)
+        {
+            var filename = file.Split("\\savegame")[1];
+            return !filename.Contains("SP Replay");
+        }
         
         public Aoe2Record Read(string path)
         {
-            var t1970 = new DateTime(1970, 1, 1);
             var record = new Aoe2Record();
-            record.Started =  (uint)File.GetCreationTime(path).ToUniversalTime().Subtract(t1970).TotalSeconds; // +/- 5 seconds diff to aoe2.net
+            record.Started = StartedFromFile(path);
             byte[] fileBytes = ReadAllBytes(path);
             var memory = new MemoryStream(fileBytes);
             var reader = new BinaryReader(memory, Encoding.ASCII);
@@ -225,6 +248,13 @@ namespace Aoe2DEOverlay
                 fs.Read(bytes, 0, length);
             }
             return bytes;
+        }
+
+        private uint StartedFromFile(string path)
+        {
+            var t1970 = new DateTime(1970, 1, 1);
+            // +/- seconds diff to aoe2.net
+            return (uint)File.GetCreationTime(path).ToUniversalTime().Subtract(t1970).TotalSeconds;
         }
     }
 }

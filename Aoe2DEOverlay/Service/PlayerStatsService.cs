@@ -21,17 +21,26 @@ namespace Aoe2DEOverlay
         {
             WatchRecordService.Instance.OnMatchUpdate += match =>
             {
-                foreach (var player in match.Players)
-                {
-                    if(player.IsAi) continue;
-                    UpdatePlayerWithState(player)
-                        .GetAwaiter()
-                        .OnCompleted(() =>
-                        {
-                            OnPlayerUpdate(match);
-                        });
-                }
+                OnMatchUpdate(match);
             };
+            MatchStateService.Instance.OnMatchUpdate += match =>
+            {
+                OnMatchUpdate(match);
+            };
+        }
+
+        private void OnMatchUpdate(Match match)
+        {
+            foreach (var player in match.Players)
+            {
+                if(player.IsAi) continue;
+                UpdatePlayerWithState(player)
+                    .GetAwaiter()
+                    .OnCompleted(() =>
+                    {
+                        OnPlayerUpdate(match);
+                    });
+            }
         }
 
 

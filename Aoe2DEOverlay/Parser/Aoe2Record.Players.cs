@@ -19,7 +19,6 @@ namespace ReadAoe2Recrod
             for (int i = 0; i < 8; i++)
             {
                 var player = new RecordPlayer();
-                
                 var dlcId  = reader.ReadUInt32();
                 var colorId = reader.ReadInt32();
                 player.Color = colorId + 1;
@@ -58,51 +57,11 @@ namespace ReadAoe2Recrod
             if (id == 6) return "Spectator";
             return "Unknown";
         }
-
+        
         public string ParseCiv(uint id)
         {
-            if (id == 1) return "Britons";
-            if (id == 2) return "Franks";
-            if (id == 3) return "Goths";
-            if (id == 4) return "Teutons";
-            if (id == 5) return "Japanese";
-            if (id == 6) return "Chinese";
-            if (id == 7) return "Byzantines";
-            if (id == 8) return "Persians";
-            if (id == 9) return "Saracens";
-            if (id == 10) return "Turks";
-            if (id == 11) return "Vikings";
-            if (id == 12) return "Mongols";
-            if (id == 13) return "Celts";
-            if (id == 14) return "Spanish";
-            if (id == 15) return "Aztecs";
-            if (id == 16) return "Mayans";
-            if (id == 17) return "Huns";
-            if (id == 18) return "Koreans";
-            if (id == 19) return "Italians";
-            if (id == 20) return "Indians";
-            if (id == 21) return "Incas";
-            if (id == 22) return "Magyars";
-            if (id == 23) return "Slavs";
-            if (id == 24) return "Portuguese";
-            if (id == 25) return "Ethiopians";
-            if (id == 26) return "Malians";
-            if (id == 27) return "Berbers";
-            if (id == 28) return "Khmer";
-            if (id == 29) return "Malay";
-            if (id == 30) return "Burmese";
-            if (id == 31) return "Vietnamese";
-            if (id == 32) return "Bulgarians";
-            if (id == 33) return "Tatars";
-            if (id == 34) return "Cumans";
-            if (id == 35) return "Lithuanians";
-            if (id == 36) return "Burgundians";
-            if (id == 37) return "Sicilians";
-            if (id == 38) return "Poles";
-            if (id == 39) return "Bohemian";
-            return "Unknown";
+            return Aoe2Mapper.ParseCiv(id);
         }
-        
     }
 
     public class RecordPlayer
