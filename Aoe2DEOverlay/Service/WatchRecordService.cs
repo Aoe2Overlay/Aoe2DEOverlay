@@ -223,8 +223,8 @@ namespace Aoe2DEOverlay
 
         private bool IsMultiplayerFromPath(string file)
         {
-            var name = file.Split("\\savegame")[1];
-            return name.Contains("MP Replay");
+            var filename = file.Split("\\savegame")[1];
+            return !filename.Contains("SP Replay");
         }
         
         public Aoe2Record Read(string path)
