@@ -124,8 +124,7 @@ namespace Aoe2DEOverlay
                 if (Metadata.HasSecret)
                 {
                     Analytics.TrackEvent("Unknown Map Name", new Dictionary<string, string> {
-                        { "Map Name", match.MapName },
-                        { "Map Type", match.MapType.ToString() }
+                        { "Map Type:Name", $"{match.MapType.ToString()} : {match.MapName}"  },
                     });
                 }
             }
