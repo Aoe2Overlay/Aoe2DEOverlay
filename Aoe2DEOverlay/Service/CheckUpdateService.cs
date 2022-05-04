@@ -76,7 +76,7 @@ namespace Aoe2DEOverlay
 
         private async Task<JToken> FetchReleases()
         {
-            var url = "https://api.github.com/repos/kickass-panda/Aoe2DEOverlay/releases";
+            var url = "https://api.github.com/repos/Aoe2Overlay/Aoe2DEOverlay/releases";
             var headers = new Dictionary<string, string>()
             {
                 { "User-Agent", "request" },
