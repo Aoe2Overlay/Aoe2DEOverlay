@@ -93,3 +93,9 @@ The player and also the panel colours can be customised in the `setting.json`.
 The color can set to `backgroundColor`, `borderColor`, `player1Color`, …, `player8Color`.
 For RGB color use hex like `#3C78FF` (Red: `3C`, Green: `78`, Blue: `FF`).
 For RGBA color use hex like `#BB000000` (Alpha: `BB` Red: `00`, Green: `00`, Blue: `00`).  
+
+## Credits
+
+- The aoe2recrod reader is a own reimplementation in C# based on [aoc-mgz](https://github.com/happyleavesaoc/aoc-mgz).
+- The Elo data are taken from the api of the website [aoe2.net](https://aoe2.net).
+
