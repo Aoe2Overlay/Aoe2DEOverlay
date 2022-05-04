@@ -151,36 +151,40 @@ namespace Aoe2DEOverlay
             foreach (var saveGameFile in saveGameFiles)
             {
                 if(counters.Count == 1) break;
-                var record = Read(saveGameFile.FullName);
-                if (!record.IsMultiplayer)
+                try
                 {
-                    counters.Clear();
-                    var id = record.Players.ToList().Find(player => !player.IsAi)?.ProfileId ?? 0;
-                    counters[id] = 1;
-                    break;
-                }
-                foreach (var player in record.Players)
-                {
-                    if (player.IsAi) continue;
-                    if (counters.ContainsKey(player.ProfileId))
+                    var record = Read(saveGameFile.FullName);
+                    if (!record.IsMultiplayer)
                     {
-                        counters[player.ProfileId] += 1;
+                        counters.Clear();
+                        var id = record.Players.ToList().Find(player => !player.IsAi)?.ProfileId ?? 0;
+                        counters[id] = 1;
+                        break;
                     }
-                    else
+                    foreach (var player in record.Players)
                     {
-                        counters[player.ProfileId] = 1;
+                        if (player.IsAi) continue;
+                        if (counters.ContainsKey(player.ProfileId))
+                        {
+                            counters[player.ProfileId] += 1;
+                        }
+                        else
+                        {
+                            counters[player.ProfileId] = 1;
+                        }
                     }
-                }
 
-                uint maxCount = 0;
-                counters.ToList().ForEach(pair => maxCount = pair.Value > maxCount ? pair.Value : maxCount);
-                foreach (var pair in new Dictionary<uint, uint>(counters) )
-                {
-                    if (pair.Value < maxCount)
+                    uint maxCount = 0;
+                    counters.ToList().ForEach(pair => maxCount = pair.Value > maxCount ? pair.Value : maxCount);
+                    foreach (var pair in new Dictionary<uint, uint>(counters) )
                     {
-                        counters.Remove(pair.Key);
+                        if (pair.Value < maxCount)
+                        {
+                            counters.Remove(pair.Key);
+                        }
                     }
                 }
+                catch{continue;}
             }
 
             uint? profileId = null;
