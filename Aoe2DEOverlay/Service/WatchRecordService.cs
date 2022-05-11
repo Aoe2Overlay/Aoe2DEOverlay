@@ -117,6 +117,7 @@ namespace Aoe2DEOverlay
                 lastFile = "";
                 var steamId = SteamIdFromPath(file) ?? 0;
                 var match = new Match();
+                match.IsRanked = false;
                 match.SteamId = steamId;
                 match.Started = StartedFromFile(file);
                 match.IsMultiplayer = IsMultiplayerFromPath(file);

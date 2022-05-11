@@ -22,10 +22,7 @@ namespace Aoe2DEOverlay.View
 
         private void ApplySettings(Setting setting)
         {
-            // TODO EXTRA MARGIN REMOVE AFTER DEVEOPMENT:
-            var devMargin = 0;
-            
-            Panel.Margin = new Thickness(Setting.Instance.Raiting.MarginLeft, Setting.Instance.Raiting.MarginTop + devMargin, Setting.Instance.Raiting.MarginRight, Setting.Instance.Raiting.MarginBottom);
+            Panel.Margin = new Thickness(Setting.Instance.Raiting.MarginLeft, Setting.Instance.Raiting.MarginTop, Setting.Instance.Raiting.MarginRight, Setting.Instance.Raiting.MarginBottom);
             Panel.HorizontalAlignment = Setting.Instance.Raiting.Horizontal;
             Panel.VerticalAlignment = Setting.Instance.Raiting.Vertical;
             Border.Background = new SolidColorBrush(Setting.Instance.Raiting.BackgroundColor);

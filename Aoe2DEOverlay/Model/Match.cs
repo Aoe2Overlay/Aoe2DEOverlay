@@ -19,5 +19,8 @@ namespace Aoe2DEOverlay
         public int MapType;
         public string MapName;
         public List<Player> Players = new (8);
+        
+        
+        public bool IsRecordRead = true;
     }
 }

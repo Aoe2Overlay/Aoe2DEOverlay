@@ -92,6 +92,7 @@ namespace Aoe2DEOverlay
         private string ServerLabelText(Match match)
         {
             var text =  Setting.Instance.Server.Format;
+            text = text.Replace("{record}", $"{(match.IsRecordRead ? "" : "(!)")}");
             text = text.Replace("{server.key}", $"{match.ServerKey}");
             text = text.Replace("{server.name}", $"{match.ServerName}");
             text = text.Replace("{mode.name}", $"{match.GameTypeName}");
